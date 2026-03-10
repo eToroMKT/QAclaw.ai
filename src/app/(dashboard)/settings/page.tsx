@@ -79,7 +79,7 @@ export default function SettingsPage() {
   }
 
   const user = session?.user;
-  const inputClass = "w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500/50";
+  const inputClass = "w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50";
 
   return (
     <div className="max-w-2xl">
@@ -113,10 +113,10 @@ export default function SettingsPage() {
           )}
         </div>
         <button onClick={handleSave} disabled={saving}
-          className="mt-6 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-lg hover:from-green-400 hover:to-emerald-500 transition-all disabled:opacity-50">
+          className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-400 hover:to-blue-500 transition-all disabled:opacity-50">
           {saving ? "Saving..." : "Save Settings"}
         </button>
-        {message && <p className="mt-3 text-sm text-green-400">{message}</p>}
+        {message && <p className="mt-3 text-sm text-blue-400">{message}</p>}
       </div>
 
       {/* Testing Platform Integration Section */}
@@ -124,7 +124,7 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold">Testing Platform Integration</h2>
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-            crowdTestingStatus === "configured" ? "bg-green-500/20 text-green-400" :
+            crowdTestingStatus === "configured" ? "bg-blue-500/20 text-blue-400" :
             crowdTestingStatus === "not_configured" ? "bg-gray-500/20 text-gray-400" :
             "bg-yellow-500/20 text-yellow-400"
           }`}>

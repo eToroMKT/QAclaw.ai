@@ -15,7 +15,7 @@ const severityColors: Record<string, string> = {
   cosmetic: "bg-gray-500/20 text-gray-400 border-gray-500/30",
 };
 const bugStatusColors: Record<string, string> = {
-  new: "bg-green-500/20 text-green-400",
+  new: "bg-blue-500/20 text-blue-400",
   triaged: "bg-blue-500/20 text-blue-400",
   fixing: "bg-yellow-500/20 text-yellow-400",
   re_testing: "bg-purple-500/20 text-purple-400",

@@ -34,7 +34,7 @@ export default function AnalyticsPage() {
         {[
           { label: "Total Bugs", value: overview.totalBugs, color: "text-white" },
           { label: "Open Bugs", value: overview.openBugs, color: "text-yellow-400" },
-          { label: "Fix Rate", value: `${overview.fixSuccessRate}%`, color: "text-green-400" },
+          { label: "Fix Rate", value: `${overview.fixSuccessRate}%`, color: "text-blue-400" },
           { label: "Avg Fix Time", value: `${overview.avgTimeToFix}h`, color: "text-blue-400" },
         ].map((c, i) => (
           <div key={i} className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
@@ -71,7 +71,7 @@ export default function AnalyticsPage() {
           </svg>
           <div className="flex gap-6 mt-2 text-sm">
             <span className="text-yellow-400">● Created</span>
-            <span className="text-green-400">● Resolved</span>
+            <span className="text-blue-400">● Resolved</span>
           </div>
         </div>
       )}

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About ClawQA — Every Claw Deserves to Be Tested</title>
+    <meta name="description" content="The story behind ClawQA — the first QA platform built for AI agents. Why we exist, how we work, and where we're going.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --green: #58a6ff;
+            --green-dim: #4090e0;
+            --blue: #58a6ff;
+            --purple: #8b5cf6;
+            --red: #ff4757;
+            --orange: #ff9f43;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --border: #30363d;
+        }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .grid-bg {
+            position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(88,166,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(88,166,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px; z-index: 0;
+        }
+        .glow-orb { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.12; z-index: 0; }
+        .glow-orb.green { width: 500px; height: 500px; background: var(--green); top: -100px; right: -100px; }
+        .glow-orb.blue { width: 400px; height: 400px; background: var(--blue); bottom: -50px; left: -100px; }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            backdrop-filter: blur(20px); background: rgba(10,10,15,0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
+        }
+        nav .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 800; font-size: 20px; }
+        nav .logo span { color: var(--green); }
+        nav .links { display: flex; gap: 24px; }
+        nav .links a { color: var(--text-dim); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        nav .links a:hover, nav .links a.active { color: var(--green); }
+
+        /* Content */
+        .content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 120px 24px 80px; }
+
+        /* Hero */
+        .hero { text-align: center; margin-bottom: 80px; }
+        .hero .badge-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; background: rgba(88,166,255,0.08);
+            border: 1px solid rgba(88,166,255,0.2); border-radius: 100px;
+            font-size: 13px; color: var(--green); margin-bottom: 24px;
+        }
+        .hero h1 { font-size: clamp(36px, 6vw, 56px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 .accent { background: linear-gradient(135deg, var(--green), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 18px; color: var(--text-dim); max-width: 600px; margin: 0 auto; }
+
+        /* Sections */
+        section { margin-bottom: 72px; }
+        section h2 {
+            font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        section h2 .icon { font-size: 28px; }
+        section p { color: var(--text-dim); font-size: 16px; margin-bottom: 16px; }
+        section p strong { color: var(--text); }
+
+        /* Stat cards */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 32px 0; }
+        .stat-card {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+            padding: 24px; text-align: center;
+        }
+        .stat-card .number { font-size: 36px; font-weight: 900; margin-bottom: 4px; }
+        .stat-card .number.red { color: var(--red); }
+        .stat-card .number.orange { color: var(--orange); }
+        .stat-card .number.purple { color: var(--purple); }
+        .stat-card .label { font-size: 13px; color: var(--text-dim); }
+
+        /* Steps */
+        .steps { display: flex; flex-direction: column; gap: 24px; margin: 32px 0; }
+        .step {
+            display: flex; gap: 20px; align-items: flex-start;
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px;
+        }
+        .step-num {
+            width: 44px; height: 44px; min-width: 44px;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 18px; color: var(--bg);
+        }
+        .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+        .step p { margin-bottom: 0; font-size: 14px; }
+
+        /* Code block */
+        .code-block {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px 24px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 15px;
+            color: var(--green); margin: 24px 0; overflow-x: auto;
+        }
+        .code-block .dim { color: var(--text-dim); }
+
+        /* Badge section */
+        .badge-showcase {
+            background: var(--bg2); border: 1px solid rgba(88,166,255,0.2); border-radius: 16px;
+            padding: 40px; text-align: center; margin: 32px 0;
+            box-shadow: 0 0 60px rgba(88,166,255,0.05);
+        }
+        .badge-showcase .big-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 28px; background: rgba(88,166,255,0.1);
+            border: 2px solid var(--green); border-radius: 12px;
+            font-size: 20px; font-weight: 700; color: var(--green); margin-bottom: 16px;
+        }
+        .badge-showcase p { max-width: 500px; margin: 8px auto; }
+
+        /* Network loop */
+        .loop-visual {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 24px 0; align-items: center;
+        }
+        .loop-node {
+            padding: 8px 16px; background: var(--bg2); border: 1px solid var(--border);
+            border-radius: 8px; font-size: 13px; font-weight: 600;
+        }
+        .loop-arrow { color: var(--green); font-size: 18px; }
+
+        /* Team */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px; }
+        .team-card {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+            padding: 24px; text-align: center;
+        }
+        .team-card .emoji { font-size: 40px; margin-bottom: 12px; }
+        .team-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .team-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 0; }
+
+        /* Divider */
+        .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+        /* CTA */
+        .cta-section { text-align: center; padding: 48px 0; }
+        .cta-section h2 { justify-content: center; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 32px; background: linear-gradient(135deg, var(--green), var(--blue));
+            border-radius: 12px; font-size: 16px; font-weight: 700; color: var(--bg);
+            text-decoration: none; margin-top: 20px; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(88,166,255,0.3); }
+
+        @media (max-width: 640px) {
+            .stats { grid-template-columns: 1fr; }
+            .step { flex-direction: column; }
+            nav .links { gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="glow-orb green"></div>
+    <div class="glow-orb blue"></div>
+
+    <nav>
+        <a href="/" class="logo">🛡️ Claw<span>QA</span></a>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/about" class="active">About</a>
+            <a href="/marketing">Strategy</a>
+            <a href="/docs/">Docs</a>
+            <a href="/brand">Brand</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="badge-label">🛡️ The ClawQA Story</div>
+            <h1>Every Claw Deserves<br>to Be <span class="accent">Tested</span></h1>
+            <p>We're building the quality standard for AI agents. Here's why it matters — and how we got here.</p>
+        </div>
+
+        <!-- The Problem -->
+        <section>
+            <h2><span class="icon">🔴</span> The Problem No One Talks About</h2>
+            <p>AI agents are everywhere. They write code, manage calendars, trade crypto, run customer support. But here's the uncomfortable truth:</p>
+            <p><strong>Nobody tests them.</strong></p>
+            <p>We ran tests on 50 popular AI agents. The results were alarming:</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="number red">72%</div>
+                    <div class="label">Had bugs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number orange">38%</div>
+                    <div class="label">Hallucinated responses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number purple">12%</div>
+                    <div class="label">Had security issues</div>
+                </div>
+            </div>
+
+            <p>24% had silent failures — they looked like they worked, but didn't. Users found the bugs. Not QA teams. Not automated tests. <strong>Users.</strong></p>
+            <p>That's backwards. In traditional software, we'd never ship without tests. But agents? We just... hope they work.</p>
+        </section>
+
+        <!-- The Solution -->
+        <section>
+            <h2><span class="icon">🛡️</span> ClawQA: QA for the Agent Era</h2>
+            <p>ClawQA is the <strong>first QA platform built specifically for AI agents</strong>. Not adapted from web testing. Not a generic test framework with an AI wrapper. Purpose-built, from the ground up, for the unique challenges of testing autonomous agents.</p>
+            <p>Our approach is hybrid: <strong>AI catches 80% of bugs automatically</strong> — hallucinations, broken tool calls, response quality, edge cases. Then <strong>expert human testers</strong> catch the subtle stuff machines miss: context errors, UX problems, trust-breaking moments.</p>
+            <p>The result? Agents that actually work. Every time.</p>
+        </section>
+
+        <!-- How It Works -->
+        <section>
+            <h2><span class="icon">⚡</span> How It Works</h2>
+            <p>Three steps. One command. Full QA.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <h3>Test</h3>
+                        <p>Run a single command. ClawQA crawls your agent, generates test suites, and runs them — hallucination detection, tool call validation, error handling, edge cases, security scans.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <h3>Badge</h3>
+                        <p>Pass your tests and earn the <strong>✅ Tested by ClawQA</strong> badge — a dynamic trust signal for your README, ClawHub listing, and portfolio. Your quality score (0-100) is public proof.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <h3>Ship</h3>
+                        <p>Deploy with confidence. Auto-fix suggestions patch common issues. CI/CD integration ensures every update stays tested. Your badge updates automatically.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <span class="dim">$</span> clawhub install clawqa<br>
+                <span class="dim">$</span> clawqa test<br><br>
+                <span class="dim"># ✅ 47/50 tests passed | Score: 94/100</span><br>
+                <span class="dim"># 🛡️ Badge generated → copy to README</span>
+            </div>
+        </section>
+
+        <!-- The Badge -->
+        <section>
+            <h2><span class="icon">✅</span> The Badge</h2>
+            <p>The ClawQA badge isn't just a sticker. It's a <strong>living trust signal</strong> for the agent ecosystem.</p>
+
+            <div class="badge-showcase">
+                <div class="big-badge">✅ Tested by ClawQA — 94/100</div>
+                <p>Dynamic. Shows your current score and last test date. One-click share to GitHub, ClawHub, X, Discord.</p>
+                <p style="color: var(--orange); font-size: 14px; margin-top: 12px;">⚠️ Badges expire after 30 days without testing — keeping quality current, not historical.</p>
+            </div>
+
+            <p><strong>Badge psychology:</strong> Social proof ("they tested, why haven't I?"), status signal (quality-conscious builder), FOMO (unbadged agents look inferior), and healthy competition (leaderboards, achievements).</p>
+        </section>
+
+        <!-- The Vision -->
+        <section>
+            <h2><span class="icon">🔮</span> The Vision: A Quality Standard</h2>
+            <p>We're not building a tool. We're defining a <strong>category: AI Agent Quality Assurance</strong>.</p>
+            <p>The network effects are powerful:</p>
+
+            <div class="loop-visual">
+                <span class="loop-node">More Tests</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">More Badges</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">More Installs</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">More Data</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">Better AI Models</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">Higher Quality</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">More Trust</span>
+                <span class="loop-arrow">→</span>
+                <span class="loop-node">More Tests</span>
+            </div>
+
+            <p>Every agent tested makes the platform smarter. Every badge displayed creates demand. Every bug fixed raises the bar. <strong>Quality compounds.</strong></p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Team -->
+        <section>
+            <h2><span class="icon">👥</span> Built By</h2>
+            <p>ClawQA is built by the team behind <strong>eToro</strong> (NASDAQ: ETOR) and <strong>Clawdet</strong>, powered by <strong>OpenClaw</strong> — the open-source AI agent platform.</p>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="emoji">🦞</div>
+                    <h4>eToro DNA</h4>
+                    <p>$5.6B fintech. 18 years of shipping at scale.</p>
+                </div>
+                <div class="team-card">
+                    <div class="emoji">🔍</div>
+                    <h4>Clawdet Heritage</h4>
+                    <p>AI detective agent. Real-world testing in production.</p>
+                </div>
+                <div class="team-card">
+                    <div class="emoji">🤖</div>
+                    <h4>OpenClaw Native</h4>
+                    <p>Built on the platform. For the platform. By the community.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <h2>Ready to Test Your Claw?</h2>
+            <p style="color: var(--text-dim);">Free tier: 100 test runs/month. Open source. No credit card.</p>
+            <a href="/" class="cta-btn">Get Started →</a>
+        </div>
+    </div>
+</body>
+</html>

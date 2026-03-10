@@ -10,7 +10,7 @@ interface Execution {
 const statusColors: Record<string, string> = {
   claimed: "bg-blue-500/20 text-blue-400",
   in_progress: "bg-yellow-500/20 text-yellow-400",
-  submitted: "bg-green-500/20 text-green-400",
+  submitted: "bg-blue-500/20 text-blue-400",
 };
 
 export default function MyTestsPage() {
@@ -26,7 +26,7 @@ export default function MyTestsPage() {
       <h1 className="text-3xl font-bold mb-8">My Tests</h1>
       <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-8">
         {loading ? <p className="text-gray-500">Loading...</p> : executions.length === 0 ? (
-          <p className="text-gray-500">No tests claimed yet. <Link href="/dashboard/browse-tests" className="text-green-400 hover:underline">Browse available tests</Link></p>
+          <p className="text-gray-500">No tests claimed yet. <Link href="/dashboard/browse-tests" className="text-blue-400 hover:underline">Browse available tests</Link></p>
         ) : (
           <div className="space-y-3">
             {executions.map(e => {

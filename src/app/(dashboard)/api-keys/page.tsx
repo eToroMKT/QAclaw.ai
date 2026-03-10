@@ -51,11 +51,11 @@ export default function ApiKeysPage() {
       <h1 className="text-3xl font-bold mb-8">API Keys</h1>
 
       {createdKey && (
-        <div className="mb-6 bg-green-500/10 border border-green-500/30 rounded-2xl p-6">
-          <p className="text-green-400 font-semibold mb-2">🔑 New API Key Created</p>
+        <div className="mb-6 bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6">
+          <p className="text-blue-400 font-semibold mb-2">🔑 New API Key Created</p>
           <p className="text-xs text-gray-400 mb-3">Copy this key now — you won&apos;t see it again!</p>
           <div className="flex gap-2">
-            <code className="flex-1 bg-gray-900/50 rounded-lg px-4 py-3 text-sm text-green-300 font-mono break-all">{createdKey}</code>
+            <code className="flex-1 bg-gray-900/50 rounded-lg px-4 py-3 text-sm text-blue-300 font-mono break-all">{createdKey}</code>
             <button onClick={copyKey} className="px-4 py-2 bg-gray-700 rounded-lg text-sm hover:bg-gray-600 transition">Copy</button>
           </div>
           <button onClick={() => setCreatedKey(null)} className="mt-3 text-sm text-gray-500 hover:text-gray-300">Dismiss</button>
@@ -69,10 +69,10 @@ export default function ApiKeysPage() {
             value={newKeyName}
             onChange={e => setNewKeyName(e.target.value)}
             placeholder="Key name (e.g., Production)"
-            className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500/50"
+            className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
           />
           <button onClick={createKey}
-            className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-lg hover:from-green-400 hover:to-emerald-500 transition-all">
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-400 hover:to-blue-500 transition-all">
             Generate
           </button>
         </div>

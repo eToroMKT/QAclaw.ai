@@ -5,7 +5,7 @@ import Link from "next/link";
 const statusColors: Record<string, string> = {
   open: "bg-blue-500/20 text-blue-400",
   running: "bg-yellow-500/20 text-yellow-400",
-  completed: "bg-green-500/20 text-green-400",
+  completed: "bg-blue-500/20 text-blue-400",
   draft: "bg-gray-500/20 text-gray-400",
   escalated_to_applause: "bg-purple-500/20 text-purple-400",
 };
@@ -36,7 +36,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <div className="flex gap-4 mb-8">
         <Link href="/dashboard/test-cycles"
-          className="px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-lg hover:from-green-400 hover:to-emerald-500 transition-all text-sm">
+          className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-400 hover:to-blue-500 transition-all text-sm">
           + New Test Cycle
         </Link>
         <button className="px-5 py-2.5 bg-purple-600/80 hover:bg-purple-500 text-white font-medium rounded-lg transition-all text-sm"

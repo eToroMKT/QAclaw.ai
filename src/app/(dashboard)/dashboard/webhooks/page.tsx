@@ -48,9 +48,9 @@ export default function WebhooksDashboard() {
         <h2 className="text-lg font-semibold mb-3">Test Webhook URL</h2>
         <div className="flex gap-3">
           <input value={testUrl} onChange={e => setTestUrl(e.target.value)} placeholder="https://example.com/webhook"
-            className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-green-500/50" />
+            className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500/50" />
           <button onClick={testWebhook}
-            className="px-5 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-all">
+            className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all">
             Send Test Ping
           </button>
         </div>
@@ -84,16 +84,16 @@ export default function WebhooksDashboard() {
                   </div>
                   <div className="flex items-center gap-3">
                     {successRate !== null && (
-                      <span className={`text-sm font-medium ${successRate >= 90 ? "text-green-400" : successRate >= 50 ? "text-yellow-400" : "text-red-400"}`}>
+                      <span className={`text-sm font-medium ${successRate >= 90 ? "text-blue-400" : successRate >= 50 ? "text-yellow-400" : "text-red-400"}`}>
                         {successRate}% success
                       </span>
                     )}
-                    <span className={`px-2 py-1 rounded-full text-xs ${wh.active ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs ${wh.active ? "bg-blue-500/20 text-blue-400" : "bg-red-500/20 text-red-400"}`}>
                       {wh.active ? "Active" : "Inactive"}
                     </span>
                   </div>
                 </div>
-                <button onClick={() => loadDeliveries(wh.id)} className="text-sm text-green-400 hover:underline">
+                <button onClick={() => loadDeliveries(wh.id)} className="text-sm text-blue-400 hover:underline">
                   {dels ? "Refresh deliveries" : "Load delivery history"}
                 </button>
                 {dels && dels.length > 0 && (
@@ -104,7 +104,7 @@ export default function WebhooksDashboard() {
                         <div className="flex items-center gap-3">
                           <span className="text-gray-500">{d.duration}ms</span>
                           {d.retryCount > 0 && <span className="text-yellow-400 text-xs">retry #{d.retryCount}</span>}
-                          <span className={d.success ? "text-green-400" : "text-red-400"}>
+                          <span className={d.success ? "text-blue-400" : "text-red-400"}>
                             {d.statusCode || "err"}
                           </span>
                         </div>

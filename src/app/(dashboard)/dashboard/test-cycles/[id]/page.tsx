@@ -18,7 +18,7 @@ const priorityColors: Record<string, string> = {
   low: "bg-gray-500/20 text-gray-400 border-gray-500/30",
 };
 const statusColors: Record<string, string> = {
-  open: "bg-green-500/20 text-green-400",
+  open: "bg-blue-500/20 text-blue-400",
   in_progress: "bg-yellow-500/20 text-yellow-400",
   running: "bg-yellow-500/20 text-yellow-400",
   completed: "bg-blue-500/20 text-blue-400",
@@ -78,7 +78,7 @@ export default function TestCycleDetailPage() {
 
   return (
     <div className="max-w-4xl">
-      <Link href="/dashboard/test-cycles" className="text-sm text-gray-400 hover:text-green-400 mb-4 inline-block">← Back to Test Cycles</Link>
+      <Link href="/dashboard/test-cycles" className="text-sm text-gray-400 hover:text-blue-400 mb-4 inline-block">← Back to Test Cycles</Link>
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">{cycle.title}</h1>
@@ -95,7 +95,7 @@ export default function TestCycleDetailPage() {
         <div className="flex items-center gap-3">
           <div className={`w-3 h-3 rounded-full ${
             isEscalated ? "bg-purple-400 animate-pulse" :
-            crowdTestingStatus?.configured && crowdTestingStatus?.reachable ? "bg-green-400" :
+            crowdTestingStatus?.configured && crowdTestingStatus?.reachable ? "bg-blue-400" :
             crowdTestingStatus?.configured ? "bg-yellow-400" : "bg-gray-500"
           }`} />
           <span className="text-sm text-gray-300">
@@ -119,7 +119,7 @@ export default function TestCycleDetailPage() {
       <div className="flex items-center gap-2 mb-6">
         {statusSteps.map((s, i) => (
           <div key={s} className="flex items-center gap-2">
-            <div className={`px-3 py-1 rounded-full text-xs font-semibold ${i <= currentIdx ? "bg-green-500/20 text-green-400" : "bg-gray-700/50 text-gray-500"}`}>
+            <div className={`px-3 py-1 rounded-full text-xs font-semibold ${i <= currentIdx ? "bg-blue-500/20 text-blue-400" : "bg-gray-700/50 text-gray-500"}`}>
               {s.replace(/_/g, " ")}
             </div>
             {i < statusSteps.length - 1 && <span className="text-gray-600">→</span>}
@@ -135,7 +135,7 @@ export default function TestCycleDetailPage() {
 
       <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 mb-6">
         <h2 className="text-lg font-semibold mb-1">Target URL</h2>
-        <a href={cycle.targetUrl} target="_blank" rel="noopener" className="text-green-400 hover:underline break-all">{cycle.targetUrl}</a>
+        <a href={cycle.targetUrl} target="_blank" rel="noopener" className="text-blue-400 hover:underline break-all">{cycle.targetUrl}</a>
       </div>
 
       {devices.length > 0 && (
@@ -152,7 +152,7 @@ export default function TestCycleDetailPage() {
         <div className="space-y-3">
           {steps.map((s, i) => (
             <div key={i} className="flex gap-3 items-start bg-gray-700/30 rounded-xl px-4 py-3">
-              <span className="text-green-400 font-bold text-sm mt-0.5">{i + 1}</span>
+              <span className="text-blue-400 font-bold text-sm mt-0.5">{i + 1}</span>
               <div className="flex-1">
                 <p className="text-white text-sm">{s.instruction}</p>
                 {s.expectedResult && <p className="text-gray-400 text-xs mt-1">Expected: {s.expectedResult}</p>}

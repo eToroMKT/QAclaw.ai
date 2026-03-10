@@ -7,7 +7,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a2e;--green:#00ff88;--blue:#4f8fff;--purple:#8b5cf6;--red:#ff4757;--text:#e8e8f0;--dim:#8888a0;--border:#1e1e30}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#161b22;--green:#58a6ff;--blue:#58a6ff;--purple:#8b5cf6;--red:#ff4757;--text:#e6edf3;--dim:#8b949e;--border:#30363d}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
   nav{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;max-width:1000px;margin:0 auto;backdrop-filter:blur(20px);background:rgba(10,10,15,0.8);position:sticky;top:0;z-index:100}
   nav a{color:var(--dim);text-decoration:none;font-size:14px;transition:color 0.3s}
@@ -32,12 +32,12 @@
 
   /* Glassmorphism section cards */
   .glass-section{background:rgba(18,18,26,0.6);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:32px;margin:24px 0;transition:border-color 0.3s}
-  .glass-section:hover{border-color:rgba(0,255,136,0.3)}
+  .glass-section:hover{border-color:rgba(88,166,255,0.3)}
 
   /* Animated flow diagram */
   .flow-diagram{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;margin:32px auto;max-width:800px}
   .flow-node{background:rgba(18,18,26,0.8);backdrop-filter:blur(10px);border:2px solid var(--border);border-radius:16px;padding:16px 20px;text-align:center;min-width:120px;position:relative;transition:all 0.4s;cursor:default}
-  .flow-node:hover{transform:scale(1.08);border-color:var(--green);box-shadow:0 0 30px rgba(0,255,136,0.2)}
+  .flow-node:hover{transform:scale(1.08);border-color:var(--green);box-shadow:0 0 30px rgba(88,166,255,0.2)}
   .flow-node .node-icon{font-size:2rem;margin-bottom:4px}
   .flow-node .node-label{font-size:0.85rem;font-weight:600;color:var(--text)}
   .flow-node .node-sub{font-size:0.7rem;color:var(--dim);margin-top:2px}
@@ -62,14 +62,14 @@
   .timeline-step{position:relative;margin-bottom:24px;opacity:1;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.175,0.885,0.32,1.275)}
   .timeline-step.visible{opacity:1;transform:translateX(0)}
   .timeline-step::before{content:'';position:absolute;left:-34px;top:8px;width:14px;height:14px;border-radius:50%;border:2px solid var(--green);background:var(--bg);transition:all 0.3s;z-index:1}
-  .timeline-step.visible::before{background:var(--green);box-shadow:0 0 12px rgba(0,255,136,0.4)}
+  .timeline-step.visible::before{background:var(--green);box-shadow:0 0 12px rgba(88,166,255,0.4)}
   .timeline-step .step-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
   .timeline-step .step-icon{font-size:1.2rem}
   .timeline-step .step-title{font-weight:600;color:var(--text);font-size:0.95rem}
   .timeline-step .step-actor{font-size:0.75rem;padding:2px 8px;border-radius:99px;font-weight:500}
   .timeline-step .step-actor.pm{background:rgba(79,143,255,0.15);color:var(--blue)}
   .timeline-step .step-actor.ai{background:rgba(139,92,246,0.15);color:var(--purple)}
-  .timeline-step .step-actor.clawqa{background:rgba(0,255,136,0.15);color:var(--green)}
+  .timeline-step .step-actor.clawqa{background:rgba(88,166,255,0.15);color:var(--green)}
   .timeline-step .step-actor.crowd-testing{background:rgba(255,71,87,0.15);color:var(--red)}
   .timeline-step .step-desc{font-size:0.85rem;color:var(--dim)}
 
@@ -87,9 +87,9 @@
   /* Comparison table glass */
   .table-container{background:rgba(18,18,26,0.6);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin:24px 0}
   .table-container table{margin:0}
-  .table-container th{padding:16px;background:rgba(0,255,136,0.05)}
+  .table-container th{padding:16px;background:rgba(88,166,255,0.05)}
   .table-container td{padding:12px 16px}
-  .table-container tr:hover td{background:rgba(0,255,136,0.03)}
+  .table-container tr:hover td{background:rgba(88,166,255,0.03)}
 
   @media(max-width:600px){
     h1{font-size:2rem}
@@ -165,10 +165,10 @@
   <!-- SVG animated connection -->
   <svg class="svg-flow" viewBox="0 0 800 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin:-16px 0 16px">
     <line x1="0" y1="20" x2="800" y2="20" stroke="url(#flowGrad)" stroke-width="2" class="animated-dash"/>
-    <defs><linearGradient id="flowGrad" x1="0" y1="0" x2="800" y2="0"><stop offset="0%" stop-color="#00ff88"/><stop offset="50%" stop-color="#4f8fff"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
-    <circle cx="80" cy="20" fill="#00ff88" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/></circle>
-    <circle cx="240" cy="20" fill="#4f8fff" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" begin="0.4s" repeatCount="indefinite"/></circle>
-    <circle cx="400" cy="20" fill="#00ff88" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" begin="0.8s" repeatCount="indefinite"/></circle>
+    <defs><linearGradient id="flowGrad" x1="0" y1="0" x2="800" y2="0"><stop offset="0%" stop-color="#58a6ff"/><stop offset="50%" stop-color="#58a6ff"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
+    <circle cx="80" cy="20" fill="#58a6ff" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="240" cy="20" fill="#58a6ff" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" begin="0.4s" repeatCount="indefinite"/></circle>
+    <circle cx="400" cy="20" fill="#58a6ff" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" begin="0.8s" repeatCount="indefinite"/></circle>
     <circle cx="560" cy="20" fill="#ff4757" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" begin="1.2s" repeatCount="indefinite"/></circle>
     <circle cx="720" cy="20" fill="#8b5cf6" class="pulse-circle"><animate attributeName="r" values="4;7;4" dur="2s" begin="1.6s" repeatCount="indefinite"/></circle>
   </svg>
@@ -322,9 +322,9 @@ document.querySelectorAll('.timeline-step').forEach(step => observer.observe(ste
 
 <!-- Version History Section -->
 <section style="margin-top:3rem;padding:2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:12px;">
-  <h2 style="color:#00ff88;margin-bottom:1.5rem;">📋 Version History</h2>
+  <h2 style="color:#58a6ff;margin-bottom:1.5rem;">📋 Version History</h2>
   
-  <div style="margin-bottom:1.5rem;padding:1rem;background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;border-radius:0 8px 8px 0;">
+  <div style="margin-bottom:1.5rem;padding:1rem;background:rgba(88,166,255,0.05);border-left:3px solid #58a6ff;border-radius:0 8px 8px 0;">
     <h3 style="color:#fff;margin:0 0 0.5rem;">v1.2.0 <span style="color:#888;font-size:0.85em;">— Feb 20, 2026</span></h3>
     <ul style="color:#ccc;margin:0;padding-left:1.5rem;">
       <li>21 eToro platform test cases on Applause crowdtesting</li>

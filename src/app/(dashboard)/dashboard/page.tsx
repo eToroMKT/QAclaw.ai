@@ -43,7 +43,7 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold">
             Welcome back,{" "}
-            <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent">
               {session?.user?.name}
             </span>
           </h1>
@@ -60,13 +60,13 @@ export default async function DashboardPage() {
 
           return (
             <Link key={project.id} href={`/projects/${project.slug}`}
-              className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 hover:border-green-500/50 transition-all group">
+              className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 hover:border-blue-500/50 transition-all group">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-bold group-hover:text-green-400 transition-colors">{project.name}</h2>
+                  <h2 className="text-xl font-bold group-hover:text-blue-400 transition-colors">{project.name}</h2>
                   <span className="text-sm text-blue-400">{project.targetUrl}</span>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${running > 0 ? "bg-yellow-500/20 text-yellow-400" : "bg-green-500/20 text-green-400"}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${running > 0 ? "bg-yellow-500/20 text-yellow-400" : "bg-blue-500/20 text-blue-400"}`}>
                   {running > 0 ? `${running} active` : "idle"}
                 </span>
               </div>
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
         <h2 className="text-xl font-bold mb-4">🤖 Auto-Fix Engine</h2>
         <div className="grid grid-cols-3 gap-6">
           <div className="text-center">
-            <p className="text-3xl font-bold text-green-400">{activeFixCount}</p>
+            <p className="text-3xl font-bold text-blue-400">{activeFixCount}</p>
             <p className="text-gray-400 text-sm">Active Fixes</p>
           </div>
           <div className="text-center">
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
 
       <div className="flex gap-4">
         <Link href="/dashboard/test-cycles"
-          className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-lg hover:from-green-400 hover:to-emerald-500 transition-all">
+          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-400 hover:to-blue-500 transition-all">
           📋 New Test Cycle
         </Link>
         <Link href="/docs"

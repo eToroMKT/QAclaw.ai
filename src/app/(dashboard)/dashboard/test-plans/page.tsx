@@ -30,12 +30,12 @@ export default function TestPlansPage() {
           {plans.map((p: any) => (
             <div key={p.id} className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6 flex items-center justify-between">
               <div>
-                <Link href={`/dashboard/test-plans/${p.id}`} className="text-lg font-semibold text-white hover:text-green-400 transition-colors">{p.title}</Link>
+                <Link href={`/dashboard/test-plans/${p.id}`} className="text-lg font-semibold text-white hover:text-blue-400 transition-colors">{p.title}</Link>
                 <div className="text-sm text-gray-400 mt-1">v{p.version} • {p.project?.name} • {p.priority}</div>
               </div>
               <div className="flex gap-3">
                 <Link href={`/dashboard/test-plans/${p.id}`} className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">View</Link>
-                <button onClick={() => runPlan(p.id)} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors">▶ Run</button>
+                <button onClick={() => runPlan(p.id)} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors">▶ Run</button>
               </div>
             </div>
           ))}

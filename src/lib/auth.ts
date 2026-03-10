@@ -4,8 +4,10 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
 
+const adapter = PrismaAdapter(prisma);
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID!,
@@ -18,7 +20,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (credentials?.password === process.env.DEMO_PASSWORD) {
-          // Find or create demo user
           let user = await prisma.user.findFirst({
             where: { email: "demo@clawqa.ai" },
           });
@@ -47,18 +48,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    async session({ session, token, user }) {
-      if (session.user) {
-        // JWT mode (credentials) uses token, DB mode (github) uses user
-        const userId = (token?.id as string) || user?.id;
-        if (userId) {
-          session.user.id = userId;
-          const dbUser = await prisma.user.findUnique({
-            where: { id: userId },
-            select: { role: true },
-          });
-          (session.user as any).role = dbUser?.role || "tester";
-        }
+    async session({ session, token }) {
+      if (session.user && token?.id) {
+        session.user.id = token.id as string;
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { role: true },
+        });
+        (session.user as any).role = dbUser?.role || "tester";
       }
       return session;
     },

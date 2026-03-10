@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function TopBar({ user }: { user: any }) {
   const roleBadge: Record<string, string> = {
     tester: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-    "agent-owner": "bg-green-500/20 text-green-400 border-green-500/30",
+    "agent-owner": "bg-blue-500/20 text-blue-400 border-blue-500/30",
     admin: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   };
 

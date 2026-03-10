@@ -28,7 +28,7 @@ export default function TestPlanDetailPage() {
       <div className="space-y-2 mb-6">
         {steps.length === 0 ? <p className="text-gray-500">No steps defined.</p> : steps.map((s: any, i: number) => (
           <div key={i} className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-4 flex gap-3">
-            <span className="text-green-400 font-mono">{i + 1}.</span>
+            <span className="text-blue-400 font-mono">{i + 1}.</span>
             <span className="text-gray-300">{typeof s === "string" ? s : s.description || JSON.stringify(s)}</span>
           </div>
         ))}

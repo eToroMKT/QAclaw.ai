@@ -41,14 +41,14 @@ export default function Sidebar({ role }: { role: string }) {
       )}
       <aside className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-gray-900/80 backdrop-blur-xl border-r border-gray-700/50 transform transition-transform ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <div className="p-6 flex items-center justify-between">
-          <Link href="/dashboard" className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">ClawQA.ai</Link>
+          <Link href="/dashboard" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent">ClawQA.ai</Link>
           {/* Close button inside sidebar on mobile */}
           <button onClick={() => setOpen(false)} className="md:hidden text-gray-400 hover:text-white text-xl p-1">✕</button>
         </div>
         <nav className="px-4 space-y-1">
           {items.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${pathname === item.href ? "bg-green-500/20 text-green-400 border border-green-500/30" : "text-gray-400 hover:text-white hover:bg-gray-800/50"}`}>
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${pathname === item.href ? "bg-blue-500/20 text-blue-400 border border-blue-500/30" : "text-gray-400 hover:text-white hover:bg-gray-800/50"}`}>
               <span>{item.icon}</span><span>{item.label}</span>
             </Link>
           ))}

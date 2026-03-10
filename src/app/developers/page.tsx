@@ -68,10 +68,10 @@ function TryItForm({ endpoint }: { endpoint: typeof endpoints[0] }) {
           className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-sm text-white font-mono" />
       )}
       <button onClick={tryIt} disabled={loading}
-        className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-sm font-medium text-white disabled:opacity-50">
+        className="px-4 py-2 bg-blue-600 hover:bg-green-700 rounded text-sm font-medium text-white disabled:opacity-50">
         {loading ? "Sending..." : "Send Request"}
       </button>
-      {result && <pre className="bg-gray-950 border border-gray-700 rounded p-3 text-xs text-green-400 overflow-x-auto max-h-60">{result}</pre>}
+      {result && <pre className="bg-gray-950 border border-gray-700 rounded p-3 text-xs text-blue-400 overflow-x-auto max-h-60">{result}</pre>}
     </div>
   );
 }
@@ -180,9 +180,9 @@ class ClawQA:
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">ClawQA.ai</Link>
+        <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent">ClawQA.ai</Link>
         <div className="flex gap-4">
-          <Link href="/developers" className="text-green-400 font-medium">Developers</Link>
+          <Link href="/developers" className="text-blue-400 font-medium">Developers</Link>
           <Link href="/login" className="text-gray-400 hover:text-white">Login</Link>
         </div>
       </nav>
@@ -196,8 +196,8 @@ class ClawQA:
           <h2 className="text-2xl font-bold mb-4">🔑 Authentication</h2>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <p className="text-gray-300 mb-3">All authenticated endpoints require an API key passed as a Bearer token:</p>
-            <pre className="bg-gray-950 rounded p-3 text-sm text-green-400">Authorization: Bearer clq_live_your_key_here</pre>
-            <p className="text-gray-400 text-sm mt-3">Generate API keys in the <Link href="/api-keys" className="text-green-400 underline">dashboard</Link>.</p>
+            <pre className="bg-gray-950 rounded p-3 text-sm text-blue-400">Authorization: Bearer clq_live_your_key_here</pre>
+            <p className="text-gray-400 text-sm mt-3">Generate API keys in the <Link href="/api-keys" className="text-blue-400 underline">dashboard</Link>.</p>
           </div>
         </section>
 
@@ -218,7 +218,7 @@ class ClawQA:
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
                 <button onClick={() => setOpenEndpoint(openEndpoint === i ? null : i)}
                   className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-gray-800/50">
-                  <span className={`px-2 py-0.5 text-xs font-mono font-bold rounded ${ep.method === "GET" ? "bg-blue-500/20 text-blue-400" : "bg-green-500/20 text-green-400"}`}>{ep.method}</span>
+                  <span className={`px-2 py-0.5 text-xs font-mono font-bold rounded ${ep.method === "GET" ? "bg-blue-500/20 text-blue-400" : "bg-blue-500/20 text-blue-400"}`}>{ep.method}</span>
                   <code className="text-sm text-white flex-1">{ep.path}</code>
                   {ep.auth && <span className="text-xs text-yellow-400">🔒 Auth</span>}
                 </button>
@@ -227,7 +227,7 @@ class ClawQA:
                     <p className="text-gray-300 text-sm mb-3">{ep.desc}</p>
                     {ep.body && (<><p className="text-xs text-gray-500 mb-1">Request body:</p><pre className="bg-gray-950 rounded p-2 text-xs text-yellow-300 mb-3 overflow-x-auto">{ep.body}</pre></>)}
                     <p className="text-xs text-gray-500 mb-1">Response:</p>
-                    <pre className="bg-gray-950 rounded p-2 text-xs text-green-400 overflow-x-auto">{ep.response}</pre>
+                    <pre className="bg-gray-950 rounded p-2 text-xs text-blue-400 overflow-x-auto">{ep.response}</pre>
                     <TryItForm endpoint={ep} />
                   </div>
                 )}
@@ -242,7 +242,7 @@ class ClawQA:
           <div className="space-y-3">
             {webhookEvents.map((we, i) => (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-                <p className="font-mono text-green-400 font-bold">{we.event}</p>
+                <p className="font-mono text-blue-400 font-bold">{we.event}</p>
                 <p className="text-gray-400 text-sm mt-1">{we.desc}</p>
                 <pre className="bg-gray-950 rounded p-2 text-xs text-yellow-300 mt-2 overflow-x-auto">{we.payload}</pre>
               </div>
@@ -254,10 +254,10 @@ class ClawQA:
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">📦 SDK / Client Libraries</h2>
           <div className="flex gap-2 mb-4">
-            <button onClick={() => setShowPython(true)} className={`px-4 py-2 rounded-lg text-sm font-medium ${showPython ? "bg-green-600 text-white" : "bg-gray-800 text-gray-400"}`}>🐍 Python</button>
-            <button onClick={() => setShowPython(false)} className={`px-4 py-2 rounded-lg text-sm font-medium ${!showPython ? "bg-green-600 text-white" : "bg-gray-800 text-gray-400"}`}>🟨 JavaScript</button>
+            <button onClick={() => setShowPython(true)} className={`px-4 py-2 rounded-lg text-sm font-medium ${showPython ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400"}`}>🐍 Python</button>
+            <button onClick={() => setShowPython(false)} className={`px-4 py-2 rounded-lg text-sm font-medium ${!showPython ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-400"}`}>🟨 JavaScript</button>
           </div>
-          <pre className="bg-gray-900 border border-gray-800 rounded-xl p-5 text-xs text-green-400 overflow-x-auto max-h-96">{showPython ? pythonSDK : jsSDK}</pre>
+          <pre className="bg-gray-900 border border-gray-800 rounded-xl p-5 text-xs text-blue-400 overflow-x-auto max-h-96">{showPython ? pythonSDK : jsSDK}</pre>
         </section>
 
         {/* MCP */}
@@ -265,7 +265,7 @@ class ClawQA:
           <h2 className="text-2xl font-bold mb-4">🤖 MCP Server (AI Agent Integration)</h2>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-gray-300">
             <p className="mb-3">ClawQA exposes an <strong>MCP (Model Context Protocol)</strong> endpoint for AI agents:</p>
-            <pre className="bg-gray-950 rounded p-3 text-sm text-green-400 mb-3">POST /api/mcp</pre>
+            <pre className="bg-gray-950 rounded p-3 text-sm text-blue-400 mb-3">POST /api/mcp</pre>
             <p className="text-sm mb-2">Send JSON-RPC 2.0 requests. Available methods:</p>
             <ul className="text-sm space-y-1 ml-4 list-disc">
               <li><code>initialize</code> — get server capabilities</li>

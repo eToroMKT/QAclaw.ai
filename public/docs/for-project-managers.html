@@ -7,7 +7,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a2e;--green:#00ff88;--blue:#4f8fff;--purple:#8b5cf6;--red:#ff4757;--text:#e8e8f0;--dim:#8888a0;--border:#1e1e30}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#161b22;--green:#58a6ff;--blue:#58a6ff;--purple:#8b5cf6;--red:#ff4757;--text:#e6edf3;--dim:#8b949e;--border:#30363d}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
   nav{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;max-width:1000px;margin:0 auto;backdrop-filter:blur(20px);background:rgba(10,10,15,0.8);position:sticky;top:0;z-index:100}
   nav a{color:var(--dim);text-decoration:none;font-size:14px;transition:color 0.3s}nav a:hover{color:var(--text)}nav a.active{color:var(--text);font-weight:600}nav a.back{color:var(--green);margin-left:auto}
@@ -26,17 +26,17 @@
   .step-cards{margin:24px 0}
   .step-card{background:rgba(18,18,26,0.6);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:24px;margin:16px 0;display:flex;gap:20px;align-items:flex-start;opacity:1;transform:translateX(-40px);transition:all 0.6s cubic-bezier(0.175,0.885,0.32,1.275)}
   .step-card.visible{opacity:1;transform:translateX(0)}
-  .step-card:hover{border-color:rgba(0,255,136,0.3);box-shadow:0 8px 30px rgba(0,255,136,0.08)}
-  .step-num{width:48px;height:48px;border-radius:12px;background:rgba(0,255,136,0.1);color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2rem;flex-shrink:0;transition:all 0.3s}
-  .step-card.visible .step-num{box-shadow:0 0 20px rgba(0,255,136,0.2)}
+  .step-card:hover{border-color:rgba(88,166,255,0.3);box-shadow:0 8px 30px rgba(88,166,255,0.08)}
+  .step-num{width:48px;height:48px;border-radius:12px;background:rgba(88,166,255,0.1);color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2rem;flex-shrink:0;transition:all 0.3s}
+  .step-card.visible .step-num{box-shadow:0 0 20px rgba(88,166,255,0.2)}
   .step-card h3{margin:0 0 8px;font-size:1rem}
   .step-card p{margin:0;font-size:0.9rem}
 
   /* Getting started checklist */
   .checklist{margin:24px 0}
   .check-item{background:rgba(18,18,26,0.6);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin:10px 0;display:flex;gap:14px;align-items:center;cursor:pointer;transition:all 0.3s;user-select:none}
-  .check-item:hover{border-color:rgba(0,255,136,0.3)}
-  .check-item.checked{border-color:var(--green);background:rgba(0,255,136,0.05)}
+  .check-item:hover{border-color:rgba(88,166,255,0.3)}
+  .check-item.checked{border-color:var(--green);background:rgba(88,166,255,0.05)}
   .check-box{width:24px;height:24px;border:2px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;flex-shrink:0}
   .check-item.checked .check-box{border-color:var(--green);background:var(--green);color:var(--bg)}
   .check-box::after{content:'✓';opacity:1;transition:opacity 0.2s;font-weight:700;font-size:0.8rem}
@@ -54,8 +54,8 @@
   .monitor-card p{font-size:0.8rem;margin:0;color:var(--dim)}
 
   /* Highlight boxes with glow */
-  .highlight-box{background:rgba(0,255,136,0.03);border:1px solid rgba(0,255,136,0.15);border-radius:16px;padding:24px;margin:16px 0;backdrop-filter:blur(10px);transition:all 0.3s;position:relative;overflow:hidden}
-  .highlight-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(0,255,136,0.05) 0%,transparent 70%);animation:glowPulse 4s ease-in-out infinite}
+  .highlight-box{background:rgba(88,166,255,0.03);border:1px solid rgba(88,166,255,0.15);border-radius:16px;padding:24px;margin:16px 0;backdrop-filter:blur(10px);transition:all 0.3s;position:relative;overflow:hidden}
+  .highlight-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(88,166,255,0.05) 0%,transparent 70%);animation:glowPulse 4s ease-in-out infinite}
   @keyframes glowPulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:0.7;transform:scale(1.1)}}
   .highlight-box h3{color:var(--green);margin:0 0 12px;position:relative;z-index:1}
   .highlight-box ul{margin-bottom:0;position:relative;z-index:1}
