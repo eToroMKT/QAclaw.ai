@@ -33,7 +33,7 @@ jobs:
           script: |
             cd /var/www/clawqa-nextjs
             git pull origin main
-            npm ci --production
+            npm ci
             npm run build
             pm2 restart clawqa-nextjs || pm2 start npm --name clawqa-nextjs -- start
             echo 'Deploy complete'

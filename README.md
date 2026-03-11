@@ -26,15 +26,34 @@ The result: **continuous human-validated quality at machine speed**.
 
 ---
 
+## ✅ Live Routes (verified 2025-03-11)
+
+| Route | Status | Description |
+|-------|--------|-------------|
+| `/` | ✅ 200 | Homepage |
+| `/login` | ✅ 200 | GitHub OAuth login |
+| `/developers` | ✅ 200 | Developer documentation |
+| `/dashboard` | ✅ 307→login | Dashboard (auth required, redirects) |
+| `/about` | ✅ 200 | About page |
+| `/about.html` | ✅ 200 | About page (direct) |
+| `/marketing` | ✅ 200 | Marketing page |
+| `/marketing.html` | ✅ 200 | Marketing page (direct) |
+| `/brand.html` | ✅ 200 | Brand assets |
+| `/selfTest.html` | ✅ 200 | Self-test document |
+| `/api/health` | ✅ 200 | Health check endpoint |
+
+---
+
 ## ✨ Features
 
 - **Dashboard** — Real-time view of test cycles, bug status, and resolution progress
 - **Test Cycle Management** — Create, monitor, and close test cycles programmatically
-- **Applause Integration** — Direct integration with Applause (uTest) for professional crowd-testing
+- **Applause Integration** — Direct integration with Applause (uTest) for professional crowd-testing (Company 1193, Product 37174)
 - **Bug Tracking** — Structured bug reports with severity, steps to reproduce, and screenshots
 - **Self-Test Generation** — Auto-generated test documents at `/selfTest.html`
 - **GitHub OAuth** — Secure authentication via NextAuth
 - **API-First Design** — Every action available via REST API for AI agent consumption
+- **Health Endpoint** — `/api/health` for monitoring and uptime checks
 
 ---
 
@@ -46,7 +65,7 @@ The result: **continuous human-validated quality at machine speed**.
 | Auth | NextAuth.js (GitHub OAuth) |
 | ORM | Prisma |
 | Database | SQLite |
-| QA Platform | Applause (Company 1193 / Product 37174) |
+| QA Platform | Applause (Company 1193 / Product 37174 / Cycle 536247) |
 | Hosting | Hetzner VPS (Ubuntu) |
 | Process Manager | PM2 |
 | CI/CD | GitHub Actions → SSH deploy |
@@ -58,7 +77,7 @@ The result: **continuous human-validated quality at machine speed**.
 ### Prerequisites
 
 - Node.js 22+
-- npm or pnpm
+- npm
 
 ### Installation
 
@@ -66,6 +85,8 @@ The result: **continuous human-validated quality at machine speed**.
 git clone https://github.com/yoniassia/clawqa.git
 cd clawqa
 npm install
+npx prisma generate
+npx prisma db push
 ```
 
 ### Environment Setup
@@ -88,13 +109,6 @@ APPLAUSE_COMPANY_ID=1193
 APPLAUSE_PRODUCT_ID=37174
 ```
 
-### Database
-
-```bash
-npx prisma generate
-npx prisma db push
-```
-
 ### Run
 
 ```bash
@@ -105,17 +119,41 @@ npm start          # Production server
 
 ---
 
-## 📡 API Overview
+## 📡 API Reference
+
+### Public
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/test-cycles` | GET | List all test cycles |
-| `/api/test-cycles` | POST | Create a new test cycle |
-| `/api/test-cycles/[id]` | GET | Get cycle details + bugs |
-| `/api/bugs` | GET | List bugs (filterable) |
-| `/api/bugs/[id]` | PATCH | Update bug status |
-| `/api/self-test` | POST | Generate self-test document |
-| `/api/health` | GET | Health check |
+| `/api/health` | GET | Health check — returns `{ status: "ok" }` |
+
+### Authenticated (v1)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/test-cycles` | GET | List all test cycles |
+| `/api/v1/test-cycles` | POST | Create a new test cycle |
+| `/api/v1/test-cycles/[id]` | GET | Get cycle details + bugs |
+| `/api/v1/test-cycles/[id]/bugs` | GET | List bugs for a cycle |
+| `/api/v1/bugs` | GET | List bugs (filterable) |
+| `/api/v1/bugs/[id]/fix` | POST | Mark bug as fixed |
+| `/api/v1/test-plans` | GET/POST | Test plan CRUD |
+| `/api/v1/test-plans/[id]/execute` | POST | Execute a test plan |
+| `/api/v1/webhooks` | GET/POST | Webhook management |
+| `/api/v1/escalate` | POST | Escalate a bug |
+| `/api/v1/applause/status` | GET | Applause integration status |
+| `/api/v1/applause/results` | GET | Fetch Applause test results |
+| `/api/v1/applause/webhook` | POST | Applause webhook receiver |
+
+### Internal
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/test-cycles` | GET/POST | Dashboard test cycle management |
+| `/api/test-cycles/claim` | POST | Claim a test cycle |
+| `/api/bugs/session` | GET | Session-scoped bug list |
+| `/api/me` | GET | Current user info |
+| `/api/api-keys` | GET/POST | API key management |
 
 ---
 
@@ -124,17 +162,9 @@ npm start          # Production server
 Automated deployment via GitHub Actions:
 
 - **Trigger:** Push to `main`
-- **Pipeline:** Build → SSH to server → Pull → Install → Build → PM2 restart
+- **Pipeline:** Lint + Build + Test → SSH to server → Pull → Install → Build → PM2 restart
 - **Server:** `135.181.43.68` (White Rabbit)
 - **Deploy path:** `/var/www/clawqa-nextjs`
-
-Secrets configured: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH`
-
----
-
-## 📸 Screenshots
-
-_Coming soon_
 
 ---
 

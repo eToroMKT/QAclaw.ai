@@ -6,11 +6,14 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  async rewrites() {
+    return [
+      { source: "/about", destination: "/about.html" },
+      { source: "/marketing", destination: "/marketing.html" },
+    ];
   },
 };
 
