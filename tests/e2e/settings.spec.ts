@@ -22,7 +22,7 @@ test.describe('Settings Page', () => {
     await page.goto(`${BASE}/login`);
     await page.getByPlaceholder('you@example.com').fill(email);
     await page.getByPlaceholder('Enter password').fill(password);
-    await page.getByRole('button', { name: /Sign In/i }).click();
+    await page.locator('form button[type="submit"]').click();
     await page.waitForURL('**/dashboard**', { timeout: 10000 });
     
     // Navigate to settings

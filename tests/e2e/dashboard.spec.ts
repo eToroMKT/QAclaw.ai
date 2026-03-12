@@ -9,13 +9,16 @@ function testEmail() {
 async function loginAsTestUser(page: Page, request: APIRequestContext) {
   const email = testEmail();
   const password = 'DashTest123!';
-  await request.post(`${BASE}/api/auth/register`, {
+  const res = await request.post(`${BASE}/api/auth/register`, {
     data: { email, password, name: 'Dashboard Test' },
   });
+  if (res.status() === 429) {
+    throw new Error('Rate limited — skip authenticated tests');
+  }
   await page.goto(`${BASE}/login`);
   await page.getByPlaceholder('you@example.com').fill(email);
   await page.getByPlaceholder('Enter password').fill(password);
-  await page.getByRole('button', { name: /Sign In/i }).click();
+  await page.locator('form button[type="submit"]').click();
   await page.waitForURL('**/dashboard**', { timeout: 10000 });
   return email;
 }
