@@ -39,6 +39,7 @@ model User {
   email            String?           @unique
   emailVerified    DateTime?
   image            String?
+  passwordHash     String?
   role             String            @default("tester")
   createdAt        DateTime          @default(now())
   accounts         Account[]

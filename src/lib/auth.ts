@@ -3,6 +3,7 @@ import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
+import bcrypt from "bcryptjs";
 
 const adapter = PrismaAdapter(prisma);
 
@@ -14,12 +15,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.GITHUB_SECRET!,
     }),
     Credentials({
-      name: "Demo Login",
+      name: "Login",
       credentials: {
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (credentials?.password === process.env.DEMO_PASSWORD) {
+        const password = credentials?.password as string | undefined;
+        const email = credentials?.email as string | undefined;
+
+        // Demo login (backward compat): no email + correct demo password
+        if (!email && password === process.env.DEMO_PASSWORD) {
           let user = await prisma.user.findFirst({
             where: { email: "demo@clawqa.ai" },
           });
@@ -34,6 +40,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
           return { id: user.id, name: user.name, email: user.email };
         }
+
+        // Email + password login
+        if (email && password) {
+          const user = await prisma.user.findUnique({
+            where: { email: email.toLowerCase() },
+          });
+          if (!user?.passwordHash) return null;
+
+          const isValid = await bcrypt.compare(password, user.passwordHash);
+          if (!isValid) return null;
+
+          return {
+            id: user.id,
+            name: user.name || "User",
+            email: user.email,
+          };
+        }
+
         return null;
       },
     }),
