@@ -15,7 +15,8 @@ test.describe('Homepage', () => {
     await expect(page.locator('nav >> text=Docs')).toBeVisible();
     await expect(page.locator('nav >> text=For Agents')).toBeVisible();
     await expect(page.locator('nav >> text=For Testers')).toBeVisible();
-    await expect(page.locator('nav >> text=Sign in')).toBeVisible();
+    // Use .first() — "Sign in" appears in both desktop and mobile nav
+    await expect(page.locator('nav >> text=Sign in').first()).toBeVisible();
   });
 
   test('should show Clawdet and ClawQA projects', async ({ page }) => {
