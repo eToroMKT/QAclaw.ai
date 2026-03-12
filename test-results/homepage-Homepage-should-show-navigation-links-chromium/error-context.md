@@ -1,0 +1,114 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e6]:
+      - generic [ref=e7]: 🦞 ClawQA.ai
+      - generic [ref=e8]:
+        - link "Docs" [ref=e9] [cursor=pointer]:
+          - /url: /docs
+        - link "For Agents" [ref=e10] [cursor=pointer]:
+          - /url: /docs/for-agents.html
+        - link "For Testers" [ref=e11] [cursor=pointer]:
+          - /url: /docs/for-testers.html
+        - link "Sign in" [ref=e12] [cursor=pointer]:
+          - /url: /login
+    - generic [ref=e13]:
+      - heading "AI Builds. Humans Verify." [level=1] [ref=e14]
+      - paragraph [ref=e15]: The API-first QA platform that connects AI coding agents with real human testers. Submit tests programmatically, get structured bug reports back, auto-fix, and ship faster.
+      - paragraph [ref=e16]: 1M+ testers across 200+ countries on real devices.
+      - generic [ref=e17]:
+        - link "Get Started" [ref=e18] [cursor=pointer]:
+          - /url: /login
+          - img [ref=e19]
+          - text: Get Started
+        - link "📖 Read the Docs" [ref=e21] [cursor=pointer]:
+          - /url: /docs
+      - generic [ref=e22]:
+        - heading "How it works" [level=2] [ref=e23]
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e26]: 🤖
+            - heading "1. AI Submits Tests" [level=3] [ref=e27]
+            - paragraph [ref=e28]: Your AI agent calls the ClawQA API with test steps and target URL. One API call.
+          - generic [ref=e29]:
+            - generic [ref=e30]: 🧪
+            - heading "2. Humans Test" [level=3] [ref=e31]
+            - paragraph [ref=e32]: Real testers on real devices across 200+ countries execute your tests. Bugs come back structured.
+          - generic [ref=e33]:
+            - generic [ref=e34]: 🔄
+            - heading "3. AI Auto-Fixes" [level=3] [ref=e35]
+            - paragraph [ref=e36]: Bug reports flow back via webhook. AI fixes the code, re-submits for verification. Loop closed.
+      - generic [ref=e37]:
+        - heading "One API call to start testing" [level=2] [ref=e38]
+        - generic [ref=e39]:
+          - generic [ref=e40]: "# Submit a test cycle"
+          - generic [ref=e41]: curl -X POST https://clawqa.ai/api/v1/test-cycles \
+          - generic [ref=e42]:
+            - text: "-H"
+            - generic [ref=e43]: "\"Authorization: Bearer clq_live_...\""
+            - text: \
+          - generic [ref=e44]: "-d '{\"title\": \"Checkout Flow\", \"target_url\": \"https://myapp.dev\", \"steps\": [...]}'}"
+          - generic [ref=e45]: "# Response"
+          - generic [ref=e46]:
+            - text: "{"
+            - generic [ref=e47]: "\"id\""
+            - text: ":"
+            - generic [ref=e48]: "\"cyc_abc123\""
+            - text: ","
+            - generic [ref=e49]: "\"status\""
+            - text: ":"
+            - generic [ref=e50]: "\"open\""
+            - text: "}"
+      - generic [ref=e51]:
+        - heading "Currently testing" [level=2] [ref=e52]
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: 🤖
+            - generic [ref=e56]:
+              - heading "Clawdet" [level=3] [ref=e57]
+              - paragraph [ref=e58]: AI Telegram bot + web dashboard
+              - text: 3 test cycles
+          - generic [ref=e59]:
+            - generic [ref=e60]: 🦞
+            - generic [ref=e61]:
+              - heading "ClawQA.AI" [level=3] [ref=e62]
+              - paragraph [ref=e63]: This platform — eating our own dogfood
+              - text: 4 test cycles
+      - generic [ref=e64]:
+        - heading "Documentation" [level=2] [ref=e65]
+        - generic [ref=e66]:
+          - link "🔭 Overview What & why" [ref=e67] [cursor=pointer]:
+            - /url: /docs/overview.html
+            - generic [ref=e68]: 🔭
+            - generic [ref=e69]: Overview
+            - generic [ref=e70]: What & why
+          - link "🏗️ Architecture Technical deep-dive" [ref=e71] [cursor=pointer]:
+            - /url: /docs/architecture.html
+            - generic [ref=e72]: 🏗️
+            - generic [ref=e73]: Architecture
+            - generic [ref=e74]: Technical deep-dive
+          - link "📊 Roadmap 12-phase plan" [ref=e75] [cursor=pointer]:
+            - /url: /docs/phases.html
+            - generic [ref=e76]: 📊
+            - generic [ref=e77]: Roadmap
+            - generic [ref=e78]: 12-phase plan
+          - link "🤖 For Agents API reference" [ref=e79] [cursor=pointer]:
+            - /url: /docs/for-agents.html
+            - generic [ref=e80]: 🤖
+            - generic [ref=e81]: For Agents
+            - generic [ref=e82]: API reference
+          - link "🧪 For Testers Earn crypto" [ref=e83] [cursor=pointer]:
+            - /url: /docs/for-testers.html
+            - generic [ref=e84]: 🧪
+            - generic [ref=e85]: For Testers
+            - generic [ref=e86]: Earn crypto
+          - link "📚 All Docs Full hub" [ref=e87] [cursor=pointer]:
+            - /url: /docs
+            - generic [ref=e88]: 📚
+            - generic [ref=e89]: All Docs
+            - generic [ref=e90]: Full hub
+      - generic [ref=e91]: Built by Claw 🦞 · 2026
+  - alert [ref=e92]
+```
