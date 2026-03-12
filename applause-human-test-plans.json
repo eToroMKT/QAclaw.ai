@@ -1,0 +1,209 @@
+[
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-01: Homepage Visual Quality — Mobile",
+    "description": "Verify homepage renders correctly on mobile devices with no visual defects",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai on mobile device (iPhone Safari or Android Chrome)", "expectedResult": "Page loads fully, no errors"},
+      {"instruction": "Read hero text 'AI Builds. Humans Verify.'", "expectedResult": "Text is clearly readable, gradient renders correctly"},
+      {"instruction": "Scroll through all sections of the homepage", "expectedResult": "No overlapping text, no horizontal scroll"},
+      {"instruction": "Check feature cards layout", "expectedResult": "Cards evenly spaced, text readable on small screen"},
+      {"instruction": "Tap 'Sign In' button", "expectedResult": "Button is large enough to tap (min 44x44px), navigates to /login"},
+      {"instruction": "Check gradient text contrast in different lighting", "expectedResult": "Text readable even in bright conditions"}
+    ],
+    "deviceRequirements": ["Mobile Safari (iPhone 13+)", "Mobile Chrome (Android)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-02: GitHub OAuth Login — Mobile",
+    "description": "Verify full GitHub OAuth redirect chain works on real mobile devices",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai/login on mobile", "expectedResult": "Login page loads with 'Continue with GitHub' button and demo password field"},
+      {"instruction": "Tap 'Continue with GitHub'", "expectedResult": "Redirects to GitHub authorization page"},
+      {"instruction": "Log in to GitHub if needed, then tap 'Authorize'", "expectedResult": "GitHub processes authorization"},
+      {"instruction": "Wait for redirect back to ClawQA", "expectedResult": "Lands on /dashboard with GitHub name and avatar shown"}
+    ],
+    "deviceRequirements": ["Mobile Safari (iPhone)", "Mobile Chrome (Android)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-03: GitHub OAuth — Cancel/Deny",
+    "description": "Verify graceful handling when user denies GitHub OAuth authorization",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai/login", "expectedResult": "Login page loads"},
+      {"instruction": "Tap 'Continue with GitHub'", "expectedResult": "Redirects to GitHub"},
+      {"instruction": "Click 'Cancel' or deny authorization on GitHub", "expectedResult": "Returns to ClawQA"},
+      {"instruction": "Check landing page", "expectedResult": "Back on /login, no crash, optional error message"}
+    ],
+    "deviceRequirements": ["Any desktop or mobile"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-04: Demo Login Flow",
+    "description": "Verify demo password login works end-to-end",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai/login", "expectedResult": "Login page loads with password field"},
+      {"instruction": "Enter password: ClawQA26", "expectedResult": "Password field accepts input"},
+      {"instruction": "Tap/click 'Sign In'", "expectedResult": "Redirects to /dashboard"},
+      {"instruction": "Verify dashboard content", "expectedResult": "Stats, sidebar, and content visible"}
+    ],
+    "deviceRequirements": ["Desktop Chrome", "Mobile Safari", "Mobile Chrome"],
+    "browserRequirements": ["Chrome 120+", "Safari 17+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-05: Wrong Password Handling",
+    "description": "Verify incorrect password shows proper error without revealing system info",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai/login", "expectedResult": "Login page loads"},
+      {"instruction": "Enter password: wrongpassword", "expectedResult": "Field accepts input"},
+      {"instruction": "Tap/click 'Sign In'", "expectedResult": "Error message appears: 'Invalid password' or similar"},
+      {"instruction": "Verify page state", "expectedResult": "Still on /login, no redirect, no server error details exposed"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-06: Mobile Hamburger Menu",
+    "description": "Verify mobile navigation sidebar opens, navigates, and closes correctly",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Login on mobile device using demo password (ClawQA26)", "expectedResult": "Dashboard loads"},
+      {"instruction": "Tap the ☰ hamburger menu icon", "expectedResult": "Sidebar slides open with animation"},
+      {"instruction": "Verify all menu items: Dashboard, Test Cycles, Bug Reports, Analytics, Settings", "expectedResult": "All items visible and readable"},
+      {"instruction": "Tap 'Bug Reports'", "expectedResult": "Navigates to /dashboard/bugs, sidebar closes"},
+      {"instruction": "Tap ☰ again to open, then tap outside the sidebar", "expectedResult": "Sidebar opens, then closes on outside tap"}
+    ],
+    "deviceRequirements": ["Mobile Safari (iPhone)", "Mobile Chrome (Android)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-07: Bug Detail Page — Mobile",
+    "description": "Verify bug report details are fully readable and correctly formatted on mobile",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Login → navigate to Bug Reports", "expectedResult": "Bug list loads with multiple entries"},
+      {"instruction": "Tap on any bug from the list", "expectedResult": "Bug detail page opens"},
+      {"instruction": "Check title and severity badge", "expectedResult": "Title readable, severity badge colored (red=critical, yellow=major, green=minor)"},
+      {"instruction": "Scroll to 'Steps to Reproduce'", "expectedResult": "Steps are numbered and fully readable"},
+      {"instruction": "Check 'Expected Result' and 'Actual Result' fields", "expectedResult": "Both fields visible, not truncated"},
+      {"instruction": "Check device info section at bottom", "expectedResult": "Device/browser info shown if present"}
+    ],
+    "deviceRequirements": ["Mobile Safari (iPhone)", "Mobile Chrome (Android)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-08: Test Cycle Detail — Mobile",
+    "description": "Verify test cycle details are usable on mobile screens",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Login → navigate to Test Cycles", "expectedResult": "Test cycle list loads"},
+      {"instruction": "Tap on a test cycle", "expectedResult": "Detail page opens"},
+      {"instruction": "Check title, status, and test steps", "expectedResult": "All visible and formatted correctly"},
+      {"instruction": "Check linked bugs section", "expectedResult": "Bug references visible and tappable"}
+    ],
+    "deviceRequirements": ["Mobile Safari (iPhone)", "Mobile Chrome (Android)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-09: Full Flow — iPhone Safari",
+    "description": "End-to-end verification of entire platform on iPhone Safari",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai in Safari on iPhone", "expectedResult": "Homepage loads correctly"},
+      {"instruction": "Tap 'Sign In' → enter ClawQA26 → tap 'Sign In'", "expectedResult": "Redirects to /dashboard"},
+      {"instruction": "Navigate to Dashboard overview", "expectedResult": "Stats and summary content loads"},
+      {"instruction": "Navigate to Test Cycles", "expectedResult": "Cycle list loads"},
+      {"instruction": "Navigate to Bug Reports", "expectedResult": "Bug list renders with entries"},
+      {"instruction": "Navigate to Analytics", "expectedResult": "Charts/data loads"},
+      {"instruction": "Navigate to Settings", "expectedResult": "Settings page loads"},
+      {"instruction": "Logout or close browser", "expectedResult": "Session ends cleanly"}
+    ],
+    "deviceRequirements": ["iPhone 13+ / Safari 17+"],
+    "browserRequirements": ["Safari 17+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-10: Full Flow — Android Chrome",
+    "description": "End-to-end verification of entire platform on Android Chrome",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai in Chrome on Android", "expectedResult": "Homepage loads correctly"},
+      {"instruction": "Tap 'Sign In' → enter ClawQA26 → tap 'Sign In'", "expectedResult": "Redirects to /dashboard"},
+      {"instruction": "Navigate through Dashboard, Test Cycles, Bug Reports, Analytics, Settings", "expectedResult": "All pages load correctly"},
+      {"instruction": "Logout or close browser", "expectedResult": "Session ends cleanly"}
+    ],
+    "deviceRequirements": ["Pixel or Samsung / Chrome 120+"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-11: Tablet Layout — iPad",
+    "description": "Verify tablet-specific layout and sidebar behavior",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai on iPad Safari", "expectedResult": "Homepage renders with appropriate spacing"},
+      {"instruction": "Login with demo password", "expectedResult": "Dashboard loads"},
+      {"instruction": "Check sidebar behavior", "expectedResult": "Either permanent sidebar or hamburger — should look intentional, not broken"},
+      {"instruction": "Navigate through all dashboard sections", "expectedResult": "Content uses width appropriately"},
+      {"instruction": "Rotate between portrait and landscape", "expectedResult": "Layout adjusts for both orientations"}
+    ],
+    "deviceRequirements": ["iPad / Safari"],
+    "browserRequirements": ["Safari 17+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-12: Landscape Orientation — Mobile",
+    "description": "Verify app works in landscape mode on mobile (known issue area)",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Rotate phone to landscape orientation", "expectedResult": "Screen rotates"},
+      {"instruction": "Open https://clawqa.ai/login", "expectedResult": "Login form fully visible without scrolling"},
+      {"instruction": "Login with demo password ClawQA26", "expectedResult": "Dashboard loads in landscape"},
+      {"instruction": "Navigate to Bug Reports", "expectedResult": "Content renders correctly in landscape"}
+    ],
+    "deviceRequirements": ["Any mobile phone"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-13: Slow Connection (3G Throttle)",
+    "description": "Verify app degrades gracefully on slow network connections",
+    "priority": "medium",
+    "steps": [
+      {"instruction": "Enable 3G throttling on device or use DevTools Network tab", "expectedResult": "Slow connection active"},
+      {"instruction": "Load https://clawqa.ai", "expectedResult": "Page loads with loading indicators, no blank screen"},
+      {"instruction": "Login with demo password", "expectedResult": "Login completes (may be slow), no timeout errors"},
+      {"instruction": "Navigate to Dashboard", "expectedResult": "Content loads, loading states visible while fetching"}
+    ],
+    "deviceRequirements": ["Any mobile or desktop"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-14: Accessibility — Screen Reader",
+    "description": "Verify basic screen reader accessibility for key user flows",
+    "priority": "medium",
+    "steps": [
+      {"instruction": "Enable VoiceOver (iOS) or TalkBack (Android)", "expectedResult": "Screen reader active"},
+      {"instruction": "Navigate to https://clawqa.ai", "expectedResult": "Homepage elements announced with meaningful labels"},
+      {"instruction": "Find and activate 'Sign In' button", "expectedResult": "Button announced as 'Sign In' or similar"},
+      {"instruction": "Navigate login form fields", "expectedResult": "Password field has accessible label"},
+      {"instruction": "After login, navigate dashboard sidebar", "expectedResult": "Menu items announced correctly"}
+    ],
+    "deviceRequirements": ["iPhone (VoiceOver) or Android (TalkBack)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  }
+]
