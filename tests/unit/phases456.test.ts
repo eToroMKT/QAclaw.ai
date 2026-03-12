@@ -11,14 +11,14 @@ describe("Webhook Dispatcher", () => {
 // ===== Test 2: Applause client configuration detection =====
 describe("Applause Client", () => {
   it("should detect unconfigured state", async () => {
-    const { ApplauseClient } = await import("@/lib/applause");
-    const client = new ApplauseClient();
+    const { CrowdTestingClient } = await import("@/lib/applause");
+    const client = new CrowdTestingClient();
     expect(client.isConfigured).toBe(false);
   });
 
   it("should detect configured state with valid config", async () => {
-    const { ApplauseClient } = await import("@/lib/applause");
-    const client = new ApplauseClient({
+    const { CrowdTestingClient } = await import("@/lib/applause");
+    const client = new CrowdTestingClient({
       apiKey: "test-key",
       productId: 123,
     });
@@ -26,8 +26,8 @@ describe("Applause Client", () => {
   });
 
   it("should throw when starting test run without config", async () => {
-    const { ApplauseClient } = await import("@/lib/applause");
-    const client = new ApplauseClient();
+    const { CrowdTestingClient } = await import("@/lib/applause");
+    const client = new CrowdTestingClient();
     await expect(client.startTestRun(["test"])).rejects.toThrow("not configured");
   });
 });
