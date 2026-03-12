@@ -102,6 +102,7 @@ model Project {
   githubOwner         String            @default("")
   githubRepo          String            @default("")
   githubWebhookSecret String            @default("")
+  screenshots        Screenshot[]
 }
 
 model TestCycle {
@@ -267,5 +268,16 @@ model EscalationRule {
   action    String   @default("notify")
   targetUrl String   @default("")
   createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id])
+}
+
+model Screenshot {
+  id        String   @id @default(cuid())
+  projectId String
+  runId     String   @default("manual")
+  testName  String
+  status    String   @default("pass")
+  imageUrl  String
+  runDate   DateTime @default(now())
   project   Project  @relation(fields: [projectId], references: [id])
 }
