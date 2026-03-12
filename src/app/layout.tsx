@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <body className={`${inter.className} bg-gray-950 text-white min-h-screen`}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider><main id="main-content">{children}</main></SessionProvider>
       </body>
     </html>
   );
