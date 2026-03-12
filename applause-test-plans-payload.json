@@ -1,0 +1,134 @@
+[
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-01: Registration Page UI Loads Correctly",
+    "description": "Verify login page loads with Sign In/Register tabs, GitHub OAuth button, and all registration form fields",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Navigate to https://clawqa.ai/login", "expectedResult": "Page loads with Sign In and Register tabs"},
+      {"instruction": "Verify 'Continue with GitHub' button is visible", "expectedResult": "GitHub OAuth button present"},
+      {"instruction": "Click the Register tab", "expectedResult": "Registration form appears"},
+      {"instruction": "Verify form fields: Name, Email, Password, Confirm Password", "expectedResult": "All 4 fields visible with correct placeholders"},
+      {"instruction": "Verify 'Create Account' button visible", "expectedResult": "Button renders correctly"}
+    ],
+    "deviceRequirements": ["Desktop Chrome", "Desktop Firefox", "Mobile Safari", "Mobile Chrome"],
+    "browserRequirements": ["Chrome 120+", "Firefox 120+", "Safari 17+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-02: Register with Valid Email and Password",
+    "description": "Complete registration flow with valid data, verify auto-redirect to dashboard",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Navigate to https://clawqa.ai/login and click Register tab", "expectedResult": "Registration form shown"},
+      {"instruction": "Enter name 'Test User', unique email, password 'SecurePass123!', confirm same", "expectedResult": "All fields filled"},
+      {"instruction": "Click 'Create Account'", "expectedResult": "Redirected to /dashboard within 15s, user is logged in"}
+    ],
+    "deviceRequirements": ["Desktop Chrome", "Mobile Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-03: Register with Mismatched Passwords",
+    "description": "Verify client-side validation catches password mismatch",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Go to Register tab, fill name+email, password='Pass1234!', confirm='DifferentPass!'", "expectedResult": "Fields filled"},
+      {"instruction": "Click 'Create Account'", "expectedResult": "Error 'Passwords don't match' shown, no redirect"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-06: Register with Duplicate Email",
+    "description": "Verify duplicate email registration returns proper error",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Register a new account with a unique email", "expectedResult": "Registration succeeds"},
+      {"instruction": "Open incognito or log out", "expectedResult": "On login page"},
+      {"instruction": "Try registering again with the same email", "expectedResult": "Error indicating email already in use (409)"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-07: Sign In with Valid Credentials",
+    "description": "Login with previously registered email/password",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Register account or use known test account", "expectedResult": "Account exists"},
+      {"instruction": "Go to https://clawqa.ai/login (Sign In tab)", "expectedResult": "Login form shown"},
+      {"instruction": "Enter email and password, click Sign In", "expectedResult": "Redirected to /dashboard"}
+    ],
+    "deviceRequirements": ["Desktop Chrome", "Mobile Safari"],
+    "browserRequirements": ["Chrome 120+", "Safari 17+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-08: Sign In with Wrong Password",
+    "description": "Verify wrong password shows generic error without leaking info",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Go to login, enter valid email + wrong password", "expectedResult": "Fields filled"},
+      {"instruction": "Click Sign In", "expectedResult": "Error 'Invalid email or password', no redirect, no hint about email existence"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-10: Auth Guards — Protected Pages Redirect",
+    "description": "All protected routes redirect unauthenticated users to /login",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Open incognito browser", "expectedResult": "Fresh session"},
+      {"instruction": "Navigate to /dashboard", "expectedResult": "Redirects to /login"},
+      {"instruction": "Navigate to /dashboard/test-cycles", "expectedResult": "Redirects to /login"},
+      {"instruction": "Navigate to /dashboard/bugs", "expectedResult": "Redirects to /login"},
+      {"instruction": "Navigate to /settings", "expectedResult": "Redirects to /login"},
+      {"instruction": "Navigate to /projects/clawqa", "expectedResult": "Redirects to /login"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-11: GitHub OAuth Regression",
+    "description": "Verify GitHub OAuth login still works after email auth addition",
+    "priority": "critical",
+    "steps": [
+      {"instruction": "Navigate to https://clawqa.ai/login", "expectedResult": "Login page loads"},
+      {"instruction": "Click 'Continue with GitHub'", "expectedResult": "Redirected to GitHub OAuth page"},
+      {"instruction": "Complete GitHub login", "expectedResult": "Redirected back to /dashboard, user info shown"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-14: Registration Rate Limiting",
+    "description": "Verify rate limiting kicks in after 5 registrations/hour",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Register 5 accounts rapidly from the same IP", "expectedResult": "All 5 succeed"},
+      {"instruction": "Attempt 6th registration", "expectedResult": "Returns 429 rate limit error"}
+    ],
+    "deviceRequirements": ["Desktop Chrome"],
+    "browserRequirements": ["Chrome 120+"]
+  },
+  {
+    "projectId": "cmlu5qwin00035dz3r1j1msfh",
+    "title": "TC-EA-15: Mobile Responsive Login/Register",
+    "description": "Verify login/register forms are usable on mobile viewports",
+    "priority": "high",
+    "steps": [
+      {"instruction": "Open https://clawqa.ai/login on mobile device", "expectedResult": "Page loads cleanly"},
+      {"instruction": "Switch between Sign In and Register tabs", "expectedResult": "Tabs work, forms display correctly"},
+      {"instruction": "Fill out registration form", "expectedResult": "No horizontal scroll, no overlap, fields usable"}
+    ],
+    "deviceRequirements": ["Mobile Safari (iPhone)", "Mobile Chrome (Android)"],
+    "browserRequirements": ["Safari 17+", "Chrome 120+"]
+  }
+]
