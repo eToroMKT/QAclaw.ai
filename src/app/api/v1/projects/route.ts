@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/api-auth";
+import { auth } from "@/lib/auth";
 
 export async function GET() {
   const projects = await prisma.project.findMany({
@@ -11,8 +12,25 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { user, response } = await requireAuth(req);
-  if (response) return response;
+  // Support both API key auth and session cookie auth
+  let authedUser: any = null;
+  const hasApiKey = req.headers.get("authorization")?.startsWith("Bearer ");
+
+  if (hasApiKey) {
+    const { user, response } = await requireAuth(req);
+    if (response) return response;
+    authedUser = user;
+  } else {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const role = (session.user as any)?.role || "tester";
+    if (role !== "agent-owner" && role !== "admin") {
+      return NextResponse.json({ error: "Forbidden: only agent-owner or admin can create projects" }, { status: 403 });
+    }
+    authedUser = { id: session.user.id };
+  }
 
   try {
     const body = await req.json();
@@ -34,7 +52,7 @@ export async function POST(req: NextRequest) {
         description: description || "",
         targetUrl: targetUrl || "",
         repoUrl: repoUrl || "",
-        ownerId: user!.id,
+        ownerId: authedUser!.id,
       },
     });
 

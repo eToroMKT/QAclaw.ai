@@ -2,9 +2,12 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
+import AddProjectButton from "@/components/AddProjectButton";
 
 export default async function DashboardPage() {
   const session = await auth();
+  const role = (session?.user as any)?.role || "tester";
+  const canManageProjects = role === "agent-owner" || role === "admin";
   const projects = await prisma.project.findMany({
     include: {
       testCycles: { select: { id: true, status: true } },
@@ -101,6 +104,7 @@ export default async function DashboardPage() {
       </div>
 
       <div className="flex gap-4">
+        {canManageProjects && <AddProjectButton />}
         <Link href="/dashboard/test-cycles"
           className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-400 hover:to-blue-500 transition-all">
           📋 New Test Cycle

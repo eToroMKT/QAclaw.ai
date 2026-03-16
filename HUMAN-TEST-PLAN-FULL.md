@@ -265,19 +265,77 @@
 
 ---
 
+## TC-15: Add Project Button — Role Visibility ⚠️ P0
+
+**Goal:** Verify the "Add Project" button only appears for agent-owner / admin roles  
+**Pre-condition:** Logged in via demo account (admin role)
+
+| Step | Action | Expected |
+|------|--------|----------|
+| 1 | Log in as admin/demo user | Dashboard loads |
+| 2 | Locate the action bar below Auto-Fix Engine widget | "➕ Add Project" button visible alongside "📋 New Test Cycle" and "📖 Documentation" |
+| 3 | Go to Settings → change role to "tester" → Save | Settings saved |
+| 4 | Navigate back to Dashboard | "➕ Add Project" button is NOT visible; other buttons remain |
+| 5 | Go to Settings → change role to "agent-owner" → Save | Settings saved |
+| 6 | Navigate back to Dashboard | "➕ Add Project" button is visible again |
+
+**Pass:** Button visibility matches role (agent-owner/admin = visible, tester = hidden)  
+**Fail:** Button visible for testers, or hidden for agent-owner/admin
+
+---
+
+## TC-16: Add Project Modal — Form & Validation ⚠️ P0
+
+**Goal:** Verify the Add Project modal opens, validates input, and creates a project  
+**Pre-condition:** Logged in as admin or agent-owner
+
+| Step | Action | Expected |
+|------|--------|----------|
+| 1 | Click "➕ Add Project" | Modal overlay appears with form fields: Name, Slug, Description, Target URL, Repository URL |
+| 2 | Click outside the modal | Modal closes |
+| 3 | Click "➕ Add Project" again | Modal re-opens |
+| 4 | Leave Name and Slug empty, click "Create Project" | Error: "Name and slug are required." |
+| 5 | Enter "Test Project" in Name | Slug auto-fills to "test-project" |
+| 6 | Edit slug manually to "custom-slug" | Slug updates, stops auto-syncing with name |
+| 7 | Fill in Description, Target URL, Repo URL | Fields accept input |
+| 8 | Click "Create Project" | Modal closes, dashboard refreshes, new project card appears |
+| 9 | Open modal again, try creating "Test Project" with slug "custom-slug" | Error: "Project with this slug already exists" |
+| 10 | Click "Cancel" | Modal closes without creating |
+
+**Pass:** Project created successfully, appears on dashboard, validation works  
+**Fail:** Modal doesn't open, project not created, no validation errors shown
+
+---
+
+## TC-17: Add Project — Tester Role Blocked (API) 🔵 P1
+
+**Goal:** Verify testers cannot create projects even via direct API call  
+**Pre-condition:** Logged in as tester role
+
+| Step | Action | Expected |
+|------|--------|----------|
+| 1 | Log in as tester (change role in Settings) | Dashboard loads, no Add Project button |
+| 2 | Open browser DevTools → Console | Console ready |
+| 3 | Run: `fetch('/api/v1/projects', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name:'Hack',slug:'hack'})}).then(r=>r.json()).then(console.log)` | Response: `{ error: "Forbidden: only agent-owner or admin can create projects" }` with 403 status |
+
+**Pass:** API rejects with 403  
+**Fail:** Project gets created or different error returned
+
+---
+
 ## Priority Summary
 
 | Priority | Test Cases | Count | Est. Time |
 |----------|-----------|-------|-----------|
-| ⚠️ P0 | TC-01, 02, 04, 06, 07, 09, 10 | 7 | ~45 min |
-| 🔵 P1 | TC-03, 05, 08, 11, 12 | 5 | ~30 min |
+| ⚠️ P0 | TC-01, 02, 04, 06, 07, 09, 10, 15, 16 | 9 | ~55 min |
+| 🔵 P1 | TC-03, 05, 08, 11, 12, 17 | 6 | ~35 min |
 | 🟢 P2 | TC-13, 14 | 2 | ~20 min |
-| **Total** | | **14** | **~95 min** |
+| **Total** | | **17** | **~110 min** |
 
 ## Minimum Viable Test
 
-If limited time: run TC-01, TC-04, TC-06, TC-07, TC-09 (or TC-10).  
-**5 tests, ~25 minutes, 1 mobile device.**
+If limited time: run TC-01, TC-04, TC-06, TC-07, TC-09 (or TC-10), TC-15, TC-16.  
+**7 tests, ~35 minutes, 1 mobile device.**
 
 ---
 
