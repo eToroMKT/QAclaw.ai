@@ -106,23 +106,26 @@ model Project {
 }
 
 model TestCycle {
-  id             String          @id @default(cuid())
-  projectId      String
-  title          String
-  description    String          @default("")
-  targetUrl      String
-  priority       String          @default("normal")
-  status         String          @default("open")
-  stepsJson      String          @default("[]")
-  deviceReqs     String          @default("[]")
-  createdAt      DateTime        @default(now())
-  createdById    String?         @default("")
-  prUrl          String          @default("")
-  prNumber       Int?            @default(0)
-  updatedAt      DateTime        @updatedAt
-  project        Project         @relation(fields: [projectId], references: [id])
-  bugReports     BugReport[]
-  testExecutions TestExecution[]
+  id               String          @id @default(cuid())
+  projectId        String
+  title            String
+  description      String          @default("")
+  targetUrl        String
+  priority         String          @default("normal")
+  status           String          @default("open")
+  stepsJson        String          @default("[]")
+  deviceReqs       String          @default("[]")
+  createdAt        DateTime        @default(now())
+  createdById      String?         @default("")
+  prUrl            String          @default("")
+  prNumber         Int?            @default(0)
+  updatedAt        DateTime        @updatedAt
+  applauseCycleId  Int?            @unique
+  applauseStatus   String?
+  lastSyncedAt     DateTime?
+  project          Project         @relation(fields: [projectId], references: [id])
+  bugReports       BugReport[]
+  testExecutions   TestExecution[]
 }
 
 model TestExecution {
@@ -157,6 +160,7 @@ model BugReport {
   affectedCids     String?
   projectSlug      String?
   isAutoReport     Boolean      @default(false)
+  applauseIssueId  Int?         @unique
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
   cycle            TestCycle    @relation(fields: [cycleId], references: [id])
