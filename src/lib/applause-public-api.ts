@@ -145,8 +145,12 @@ export class ApplausePublicApi {
 
   // ── Bugs / Issues ────────────────────────────────────────────────
 
-  async getTestCycleBugs(cycleId: number, page = 0, size = 50): Promise<PagedResponse<ApplauseIssue>> {
-    return this.request('GET', `/test-cycles/${cycleId}/bugs?page=${page}&size=${size}`);
+  async getTestCycleBugs(cycleId: number, page = 1, size = 50): Promise<PagedResponse<ApplauseIssue>> {
+    return this.request('GET', `/test-cycles/${cycleId}/issues?page=${page}&size=${size}`);
+  }
+
+  async getTestCycleIssues(cycleId: number, page = 1, size = 50): Promise<PagedResponse<ApplauseIssue>> {
+    return this.getTestCycleBugs(cycleId, page, size);
   }
 
   async getIssue(issueId: number): Promise<ApplauseIssue> {

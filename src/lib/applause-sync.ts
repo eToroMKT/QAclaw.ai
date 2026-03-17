@@ -103,11 +103,11 @@ export async function syncCycleFromApplause(
   let bugsCreated = 0;
   let bugsUpdated = 0;
   let totalApplauseBugs = 0;
-  let page = 0;
+  let page = 1;
   let hasMore = true;
 
   while (hasMore) {
-    const bugsPage = await api.getTestCycleBugs(cycle.applauseCycleId, page, 50);
+    const bugsPage = await api.getTestCycleIssues(cycle.applauseCycleId, page, 50);
     totalApplauseBugs = bugsPage.totalElements;
 
     for (const issue of bugsPage.content) {
@@ -116,8 +116,8 @@ export async function syncCycleFromApplause(
       if (result === 'updated') bugsUpdated++;
     }
 
-    page++;
     hasMore = page < bugsPage.totalPages;
+    page++;
   }
 
   // 3. Update cycle record
@@ -150,7 +150,7 @@ export async function syncCycleFromApplause(
 
 // ── Bug Upsert ───────────────────────────────────────────────────────
 
-function mapSeverity(severityId?: number): string {
+function mapSeverity(severityId?: number, severity?: string): string {
   // Applause severity IDs: 1=Critical, 2=High/Major, 3=Medium/Normal, 4=Low/Minor, 5=Cosmetic
   switch (severityId) {
     case 1: return 'critical';
@@ -158,8 +158,15 @@ function mapSeverity(severityId?: number): string {
     case 3: return 'normal';
     case 4: return 'minor';
     case 5: return 'cosmetic';
-    default: return 'minor';
   }
+
+  const s = (severity || '').toUpperCase();
+  if (s === 'CRITICAL') return 'critical';
+  if (s === 'HIGH' || s === 'MAJOR') return 'major';
+  if (s === 'MEDIUM' || s === 'NORMAL') return 'normal';
+  if (s === 'LOW' || s === 'MINOR') return 'minor';
+  if (s === 'COSMETIC') return 'cosmetic';
+  return 'minor';
 }
 
 function mapStatus(applauseStatus?: string): string {
@@ -185,7 +192,7 @@ async function upsertBug(
 
   const bugData = {
     title: issue.subject || `Applause Issue #${issue.id}`,
-    severity: mapSeverity(issue.severityId),
+    severity: mapSeverity(issue.severityId, issue.severity),
     status: mapStatus(issue.status),
     stepsToReproduce: issue.actionPerform || '',
     expectedResult: issue.expectedResult || '',
