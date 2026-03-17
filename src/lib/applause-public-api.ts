@@ -63,6 +63,9 @@ export interface CreateTestCycleDto {
   templateTestCycleId?: number;
   type?: 'FUNCTIONAL' | 'AUTOMATION';
   methodology?: 'EXPLORATORY' | 'EXPLORATORY_WITH_TEST_CASES';
+  productId?: number;
+  startDate?: string;
+  endDate?: string;
   name?: string;
   buildId?: number;
   setupInstructions?: string;
@@ -128,7 +131,15 @@ export class ApplausePublicApi {
   }
 
   async createTestCycle(dto: CreateTestCycleDto): Promise<ApplauseTestCycle> {
-    return this.request('POST', '/test-cycles', dto);
+    const { templateTestCycleId, type, methodology, ...body } = dto;
+    const params = new URLSearchParams();
+
+    if (typeof templateTestCycleId === 'number') params.set('templateTestCycleId', String(templateTestCycleId));
+    if (type) params.set('type', type);
+    if (methodology) params.set('methodology', methodology);
+
+    const query = params.toString();
+    return this.request('POST', `/test-cycles${query ? `?${query}` : ''}`, body);
   }
 
   async updateTestCycle(cycleId: number, dto: Partial<CreateTestCycleDto>): Promise<ApplauseTestCycle> {

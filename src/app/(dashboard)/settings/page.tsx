@@ -21,6 +21,8 @@ export default function SettingsPage() {
   const [crowdTestingStatus, setCrowdTestingStatus] = useState<"checking" | "configured" | "not_configured">("checking");
   const [testingConnection, setTestingConnection] = useState(false);
   const [connectionResult, setConnectionResult] = useState("");
+  const [applauseAutoCreateOnEscalate, setApplauseAutoCreateOnEscalate] = useState(false);
+  const [savingFlags, setSavingFlags] = useState(false);
 
   useEffect(() => {
     fetch("/api/me").then(r => r.json()).then(data => {
@@ -35,12 +37,12 @@ export default function SettingsPage() {
         }
       }
     });
-    fetch("/api/v1/crowdTesting/status")
+    fetch("/api/v1/applause/status")
       .then(r => r.json())
       .then(data => {
-        // Using new status endpoint
         if (data.configured === false) setCrowdTestingStatus("not_configured");
         else if (data.configured && data.reachable) setCrowdTestingStatus("configured"); else setCrowdTestingStatus("not_configured");
+        setApplauseAutoCreateOnEscalate(!!data.applauseAutoCreateOnEscalate);
       })
       .catch(() => setCrowdTestingStatus("not_configured"));
   }, []);
@@ -62,12 +64,12 @@ export default function SettingsPage() {
     setTestingConnection(true);
     setConnectionResult("");
     try {
-      const res = await fetch("/api/v1/crowdTesting/status");
+      const res = await fetch("/api/v1/applause/status");
       const data = await res.json();
       if (!data.configured) {
         setConnectionResult("❌ Not configured — set env vars on server");
       } else if (data.reachable) {
-        setConnectionResult("✅ CrowdTesting is configured and reachable");
+        setConnectionResult("✅ Applause is configured and reachable");
         setCrowdTestingStatus("configured");
       } else {
         setConnectionResult("⚠️ Configured but not reachable");
@@ -76,6 +78,25 @@ export default function SettingsPage() {
       setConnectionResult("❌ Connection failed: " + e.message);
     }
     setTestingConnection(false);
+  }
+
+  async function saveRuntimeFlag() {
+    setSavingFlags(true);
+    setConnectionResult("");
+    try {
+      const res = await fetch("/api/v1/runtime-flags", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applauseAutoCreateOnEscalate }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save flag");
+      setApplauseAutoCreateOnEscalate(!!data.applauseAutoCreateOnEscalate);
+      setConnectionResult("✅ Escalation mode updated in real time");
+    } catch (e: any) {
+      setConnectionResult("❌ Failed to update escalation mode: " + e.message);
+    }
+    setSavingFlags(false);
   }
 
   const user = session?.user;
@@ -159,15 +180,41 @@ export default function SettingsPage() {
               className={inputClass} disabled />
           </div>
         </div>
-        <div className="mt-6 flex items-center gap-4">
-          <button onClick={testConnection} disabled={testingConnection}
-            className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all disabled:opacity-50">
-            {testingConnection ? "Testing..." : "Test Connection"}
-          </button>
-          {connectionResult && <span className="text-sm">{connectionResult}</span>}
+        <div className="mt-6 space-y-4">
+          <div className="rounded-xl border border-gray-700/50 bg-gray-900/40 p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-medium">Applause escalation mode</h3>
+                <p className="text-sm text-gray-400 mt-1">
+                  Off = "Escalate to Testers" marks the cycle for manual Applause handoff only. On = escalating auto-creates and links an Applause cycle immediately.
+                </p>
+              </div>
+              <label className="inline-flex items-center gap-3 cursor-pointer">
+                <span className="text-sm text-gray-300">Auto-create on Escalate</span>
+                <input
+                  type="checkbox"
+                  checked={applauseAutoCreateOnEscalate}
+                  onChange={e => setApplauseAutoCreateOnEscalate(e.target.checked)}
+                  className="h-4 w-4"
+                />
+              </label>
+            </div>
+            <button onClick={saveRuntimeFlag} disabled={savingFlags}
+              className="mt-4 px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-medium rounded-lg transition-all disabled:opacity-50">
+              {savingFlags ? "Saving..." : "Save Escalation Mode"}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button onClick={testConnection} disabled={testingConnection}
+              className="px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all disabled:opacity-50">
+              {testingConnection ? "Testing..." : "Test Connection"}
+            </button>
+            {connectionResult && <span className="text-sm">{connectionResult}</span>}
+          </div>
         </div>
         <p className="text-gray-500 text-xs mt-4">
-          ⚠️ Credentials are configured via environment variables on the server (TESTING_API_KEY, TESTING_PRODUCT_ID, TESTING_AUTO_API_URL, TESTING_PUBLIC_API_URL).
+          ⚠️ Credentials are configured via environment variables on the server (APPLAUSE_API_KEY, APPLAUSE_PRODUCT_ID, APPLAUSE_AUTO_API_URL, APPLAUSE_PUBLIC_API_URL). The escalation mode toggle is runtime-backed and can be changed without redeploying code.
         </p>
       </div>
     </div>

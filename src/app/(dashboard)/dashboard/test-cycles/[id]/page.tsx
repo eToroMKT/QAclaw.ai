@@ -72,7 +72,7 @@ export default function TestCycleDetailPage() {
   const [syncing, setSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
-  const [crowdTestingStatus, setCrowdTestingStatus] = useState<{ configured: boolean; reachable: boolean } | null>(null);
+  const [crowdTestingStatus, setCrowdTestingStatus] = useState<{ configured: boolean; reachable: boolean; applauseAutoCreateOnEscalate?: boolean; escalationMode?: string } | null>(null);
 
   const loadCycle = useCallback(() => {
     fetch(`/api/v1/test-cycles/${id}`)
@@ -122,7 +122,18 @@ export default function TestCycleDetailPage() {
   const lastSyncedAt = cycle.lastSyncedAt || syncStatus?.lastSyncedAt;
 
   async function escalate() {
-    await fetch("/api/v1/escalate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cycleId: cycle!.id }) });
+    const res = await fetch("/api/v1/escalate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cycleId: cycle!.id }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      alert(data.error || "Escalation failed");
+      return;
+    }
+
     window.location.reload();
   }
 
@@ -189,6 +200,9 @@ export default function TestCycleDetailPage() {
               {lastSyncedAt && (
                 <p className="text-xs text-gray-500 mt-0.5">Last synced: {formatRelativeTime(lastSyncedAt)}</p>
               )}
+              <p className="text-xs text-gray-500 mt-0.5">
+                Escalation mode: {crowdTestingStatus?.applauseAutoCreateOnEscalate ? "Auto-create Applause on Escalate" : "Manual handoff on Escalate"}
+              </p>
             </div>
           </div>
 

@@ -237,6 +237,8 @@ async function upsertBug(
 // ── Create Applause Cycle ────────────────────────────────────────────
 
 const DEFAULT_TEMPLATE_CYCLE_ID = 536247; // Our existing Applause cycle
+const DEFAULT_APPLAUSE_PRODUCT_ID = parseInt(process.env.APPLAUSE_PRODUCT_ID || '37174', 10);
+const DEFAULT_APPLAUSE_CYCLE_DAYS = parseInt(process.env.APPLAUSE_DEFAULT_CYCLE_DAYS || '7', 10);
 
 export async function createApplauseCycle(
   clawqaCycleId: string,
@@ -257,18 +259,19 @@ export async function createApplauseCycle(
 
   console.log(`[applause-sync] Creating Applause cycle from template ${templateCycleId}...`);
 
+  const now = new Date();
+  const end = new Date(now.getTime() + DEFAULT_APPLAUSE_CYCLE_DAYS * 24 * 60 * 60 * 1000);
+
   const newCycle = await api.createTestCycle({
     templateTestCycleId: templateCycleId,
+    productId: DEFAULT_APPLAUSE_PRODUCT_ID,
+    startDate: now.toISOString(),
+    endDate: end.toISOString(),
     name: cycle.title,
+    setupInstructions: cycle.description || undefined,
+    inScope: cycle.targetUrl ? `Target URL: ${cycle.targetUrl}` : undefined,
+    issueReportingInstructions: 'Please file bugs directly in Applause for ClawQA sync validation and triage.',
   });
-
-  // Update with instructions from our cycle
-  if (cycle.description || cycle.targetUrl) {
-    await api.updateTestCycle(newCycle.id, {
-      setupInstructions: cycle.description,
-      inScope: cycle.targetUrl ? `Target URL: ${cycle.targetUrl}` : undefined,
-    });
-  }
 
   // Request activation
   try {
@@ -278,16 +281,18 @@ export async function createApplauseCycle(
     console.warn(`[applause-sync] Activation request failed (may need manual activation): ${err.message}`);
   }
 
+  const refreshedCycle = await api.getTestCycle(newCycle.id).catch(() => newCycle);
+
   // Link to ClawQA cycle
   await prisma.testCycle.update({
     where: { id: clawqaCycleId },
     data: {
       applauseCycleId: newCycle.id,
-      applauseStatus: newCycle.status || 'DRAFT',
+      applauseStatus: (refreshedCycle.status || newCycle.status || 'NEW') as string,
     },
   });
 
-  return { applauseCycleId: newCycle.id, status: newCycle.status || 'DRAFT' };
+  return { applauseCycleId: newCycle.id, status: (refreshedCycle.status || newCycle.status || 'NEW') as string };
 }
 
 // ── Sync Status Helper ───────────────────────────────────────────────

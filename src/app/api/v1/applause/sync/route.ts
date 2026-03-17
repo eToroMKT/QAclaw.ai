@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/api-auth';
+import { auth } from '@/lib/auth';
 import { syncCycleFromApplause, getSyncStatus, createApplauseCycle } from '@/lib/applause-sync';
 
 /**
@@ -28,8 +29,16 @@ export async function GET(req: NextRequest) {
  * action="create": Create a new Applause cycle linked to this ClawQA cycle
  */
 export async function POST(req: NextRequest) {
-  const { user, response } = await requireAuth(req);
-  if (response) return response;
+  const authHeader = req.headers.get('authorization');
+  if (authHeader?.startsWith('Bearer ')) {
+    const { response } = await requireAuth(req);
+    if (response) return response;
+  } else {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+  }
 
   try {
     const body = await req.json();
