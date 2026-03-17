@@ -7,6 +7,8 @@ interface Bug { id: string; title: string; severity: string; status: string; cre
 interface Cycle {
   id: string; title: string; description: string; targetUrl: string;
   priority: string; status: string; stepsJson: string; deviceReqs: string;
+  browserReqs?: string; inScope?: string; outOfScope?: string;
+  setupInstructions?: string; issueReportingInstructions?: string; buildVersion?: string;
   createdAt: string; project: { id: string; name: string; slug: string; };
   bugReports: Bug[]; testExecutions: any[];
   applauseCycleId?: number | null;
@@ -32,6 +34,8 @@ interface SyncResult {
   skippedReason?: string;
   error?: string;
 }
+
+type DisplayStep = { instruction: string; expectedResult: string };
 
 const priorityColors: Record<string, string> = {
   critical: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -65,6 +69,50 @@ function formatRelativeTime(dateStr: string | null | undefined): string {
   return new Date(dateStr).toLocaleDateString();
 }
 
+function parseStringArray(value: string | undefined): string[] {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string" && !!item.trim()) : [];
+  } catch {
+    return [];
+  }
+}
+
+function parseSteps(value: string | undefined): DisplayStep[] {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((step): DisplayStep | null => {
+        if (typeof step === "string") {
+          const instruction = step.trim();
+          return instruction ? { instruction, expectedResult: "" } : null;
+        }
+        if (step && typeof step === "object") {
+          const instruction = typeof step.instruction === "string" ? step.instruction.trim() : "";
+          const expectedResult = typeof step.expectedResult === "string" ? step.expectedResult.trim() : "";
+          return instruction ? { instruction, expectedResult } : null;
+        }
+        return null;
+      })
+      .filter((step): step is DisplayStep => !!step);
+  } catch {
+    return [];
+  }
+}
+
+function InfoBlock({ title, body }: { title: string; body: string }) {
+  if (!body.trim()) return null;
+  return (
+    <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 mb-6">
+      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <p className="text-gray-300 whitespace-pre-wrap">{body}</p>
+    </div>
+  );
+}
+
 export default function TestCycleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [cycle, setCycle] = useState<Cycle | null>(null);
@@ -89,7 +137,6 @@ export default function TestCycleDetailPage() {
       .catch(() => {});
   }, [loadCycle]);
 
-  // Load Applause sync status once cycle is known
   useEffect(() => {
     if (!cycle) return;
     fetch(`/api/v1/applause/sync?cycleId=${cycle.id}`)
@@ -98,7 +145,6 @@ export default function TestCycleDetailPage() {
       .catch(() => {});
   }, [cycle?.id]);
 
-  // Auto-sync on page load if TTL expired
   useEffect(() => {
     if (syncStatus?.linked && syncStatus.needsSync && !syncing) {
       handleSync(false);
@@ -109,10 +155,9 @@ export default function TestCycleDetailPage() {
   if (loading) return <div className="text-gray-500">Loading...</div>;
   if (!cycle) return <div className="text-red-400">Cycle not found</div>;
 
-  let steps: { instruction: string; expectedResult: string }[] = [];
-  try { steps = JSON.parse(cycle.stepsJson); } catch {}
-  let devices: string[] = [];
-  try { devices = JSON.parse(cycle.deviceReqs); } catch {}
+  const steps = parseSteps(cycle.stepsJson);
+  const devices = parseStringArray(cycle.deviceReqs);
+  const browsers = parseStringArray(cycle.browserReqs);
 
   const currentIdx = statusSteps.indexOf(cycle.status);
   const isEscalated = cycle.status === "escalated_to_applause";
@@ -149,7 +194,6 @@ export default function TestCycleDetailPage() {
       const data: SyncResult = await res.json();
       setSyncResult(data);
       if (!data.error && data.synced) {
-        // Refresh cycle data to pick up new bugs
         setTimeout(() => { loadCycle(); }, 800);
       }
     } catch (e: any) {
@@ -177,7 +221,6 @@ export default function TestCycleDetailPage() {
         </div>
       </div>
 
-      {/* CrowdTesting / Applause Status Panel */}
       <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-4 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
@@ -229,7 +272,6 @@ export default function TestCycleDetailPage() {
           </div>
         </div>
 
-        {/* Sync result feedback */}
         {syncResult && (
           <div className={`mt-3 text-sm px-3 py-2 rounded-lg ${syncResult.error ? "bg-red-500/10 text-red-400" : !syncResult.synced ? "bg-gray-700/50 text-gray-400" : "bg-green-500/10 text-green-400"}`}>
             {syncResult.error
@@ -241,7 +283,6 @@ export default function TestCycleDetailPage() {
         )}
       </div>
 
-      {/* Status flow */}
       <div className="flex items-center gap-2 mb-6">
         {statusSteps.map((s, i) => (
           <div key={s} className="flex items-center gap-2">
@@ -253,11 +294,12 @@ export default function TestCycleDetailPage() {
         ))}
       </div>
 
-      {cycle.description && (
-        <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 mb-6">
-          <p className="text-gray-300">{cycle.description}</p>
-        </div>
-      )}
+      <InfoBlock title="Summary" body={cycle.description || ""} />
+      <InfoBlock title="In Scope" body={cycle.inScope || ""} />
+      <InfoBlock title="Out of Scope" body={cycle.outOfScope || ""} />
+      <InfoBlock title="Setup Instructions" body={cycle.setupInstructions || ""} />
+      <InfoBlock title="Issue Reporting Instructions" body={cycle.issueReportingInstructions || ""} />
+      <InfoBlock title="Build Version" body={cycle.buildVersion || ""} />
 
       <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 mb-6">
         <h2 className="text-lg font-semibold mb-1">Target URL</h2>
@@ -269,6 +311,15 @@ export default function TestCycleDetailPage() {
           <h2 className="text-lg font-semibold mb-3">Device Requirements</h2>
           <div className="flex flex-wrap gap-2">
             {devices.map(d => <span key={d} className="text-xs bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full">{d}</span>)}
+          </div>
+        </div>
+      )}
+
+      {browsers.length > 0 && (
+        <div className="bg-gray-800/40 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-3">Browser Requirements</h2>
+          <div className="flex flex-wrap gap-2">
+            {browsers.map(browser => <span key={browser} className="text-xs bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full">{browser}</span>)}
           </div>
         </div>
       )}
@@ -285,6 +336,7 @@ export default function TestCycleDetailPage() {
               </div>
             </div>
           ))}
+          {steps.length === 0 && <p className="text-gray-500">No test steps recorded.</p>}
         </div>
       </div>
 

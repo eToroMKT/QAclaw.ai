@@ -7,6 +7,7 @@
 
 import { prisma } from './prisma';
 import { getApplausePublicApi, type ApplauseIssue } from './applause-public-api';
+import { normalizeSteps, normalizeStringArray } from './test-cycle-normalization';
 
 const SYNC_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -240,6 +241,77 @@ const DEFAULT_TEMPLATE_CYCLE_ID = 536247; // Our existing Applause cycle
 const DEFAULT_APPLAUSE_PRODUCT_ID = parseInt(process.env.APPLAUSE_PRODUCT_ID || '37174', 10);
 const DEFAULT_APPLAUSE_CYCLE_DAYS = parseInt(process.env.APPLAUSE_DEFAULT_CYCLE_DAYS || '7', 10);
 
+function joinSections(sections: Array<{ title?: string; body?: string | null }>): string | undefined {
+  const content = sections
+    .map(({ title, body }) => {
+      const cleaned = typeof body === 'string' ? body.trim() : '';
+      if (!cleaned) return '';
+      return title ? `${title}:\n${cleaned}` : cleaned;
+    })
+    .filter(Boolean)
+    .join('\n\n')
+    .trim();
+
+  return content || undefined;
+}
+
+function parseStepsJson(value: string): ReturnType<typeof normalizeSteps> {
+  try {
+    return normalizeSteps(JSON.parse(value || '[]'));
+  } catch {
+    return [];
+  }
+}
+
+function parseStringArrayJson(value: string): string[] {
+  try {
+    return normalizeStringArray(JSON.parse(value || '[]'));
+  } catch {
+    return [];
+  }
+}
+
+function formatApplauseSetupInstructions(cycle: {
+  description: string;
+  setupInstructions: string;
+  buildVersion: string;
+}): string | undefined {
+  return joinSections([
+    { title: 'Summary', body: cycle.description },
+    { title: 'Setup', body: cycle.setupInstructions },
+    { title: 'Build / Version', body: cycle.buildVersion },
+  ]);
+}
+
+function formatApplauseInScope(cycle: {
+  targetUrl: string;
+  inScope: string;
+  deviceReqs: string;
+  browserReqs: string;
+}): string | undefined {
+  const devices = parseStringArrayJson(cycle.deviceReqs);
+  const browsers = parseStringArrayJson(cycle.browserReqs);
+
+  return joinSections([
+    { title: 'Target URL', body: cycle.targetUrl },
+    { title: 'Scope', body: cycle.inScope },
+    { title: 'Devices / Platforms', body: devices.length ? devices.map(item => `- ${item}`).join('\n') : '' },
+    { title: 'Browsers', body: browsers.length ? browsers.map(item => `- ${item}`).join('\n') : '' },
+  ]);
+}
+
+function formatApplauseSpecialInstructions(cycle: { stepsJson: string }): string | undefined {
+  const steps = parseStepsJson(cycle.stepsJson);
+  if (!steps.length) return undefined;
+
+  return `Test Steps:\n${steps
+    .map((step, index) => {
+      const expected = step.expectedResult ? `\n   Expected: ${step.expectedResult}` : '';
+      return `${index + 1}. ${step.instruction}${expected}`;
+    })
+    .join('\n\n')}`;
+}
+
 export async function createApplauseCycle(
   clawqaCycleId: string,
   templateCycleId = DEFAULT_TEMPLATE_CYCLE_ID
@@ -268,9 +340,13 @@ export async function createApplauseCycle(
     startDate: now.toISOString(),
     endDate: end.toISOString(),
     name: cycle.title,
-    setupInstructions: cycle.description || undefined,
-    inScope: cycle.targetUrl ? `Target URL: ${cycle.targetUrl}` : undefined,
-    issueReportingInstructions: 'Please file bugs directly in Applause for ClawQA sync validation and triage.',
+    setupInstructions: formatApplauseSetupInstructions(cycle),
+    inScope: formatApplauseInScope(cycle),
+    outOfScope: cycle.outOfScope?.trim() || undefined,
+    issueReportingInstructions:
+      cycle.issueReportingInstructions?.trim() ||
+      'Please file bugs directly in Applause for ClawQA sync validation and triage.',
+    specialInstructions: formatApplauseSpecialInstructions(cycle),
   });
 
   // Request activation
