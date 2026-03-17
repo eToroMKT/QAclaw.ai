@@ -6,7 +6,7 @@ export interface RuntimeFlags {
 }
 
 const DEFAULT_FLAGS: RuntimeFlags = {
-  applauseAutoCreateOnEscalate: false,
+  applauseAutoCreateOnEscalate: true,
 };
 
 function getFlagsPath() {
