@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/api-auth";
+import { auth } from "@/lib/auth";
 import { createTestCycleFromInput } from "@/lib/test-cycle-create";
 
 export async function GET() {
@@ -12,8 +13,16 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { response } = await requireAuth(req);
-  if (response) return response;
+  const hasApiKey = req.headers.get("authorization")?.startsWith("Bearer ");
+  if (hasApiKey) {
+    const { response } = await requireAuth(req);
+    if (response) return response;
+  } else {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
 
   try {
     const body = await req.json();
