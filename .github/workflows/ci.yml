@@ -16,6 +16,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run db:guard
       - run: npm run build
       - run: npm run test:coverage
       - uses: codecov/codecov-action@v4

@@ -32,8 +32,4 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             cd /var/www/clawqa-nextjs
-            git pull origin main
-            npm ci
-            npm run build
-            pm2 restart clawqa-nextjs || pm2 start npm --name clawqa-nextjs -- start
-            echo 'Deploy complete'
+            bash scripts/deploy-prod.sh

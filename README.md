@@ -101,7 +101,7 @@ GITHUB_ID=your-github-oauth-app-id
 GITHUB_SECRET=your-github-oauth-app-secret
 
 # Database
-DATABASE_URL=file:./dev.db
+DATABASE_URL=file:./prisma/dev.db
 
 # Applause
 APPLAUSE_API_KEY=your-applause-api-key
@@ -162,7 +162,7 @@ npm start          # Production server
 Automated deployment via GitHub Actions:
 
 - **Trigger:** Push to `main`
-- **Pipeline:** Lint + Build + Test → SSH to server → Pull → Install → Build → PM2 restart
+- **Pipeline:** Lint + Build + Test → DB layout guard → SSH to server → guarded deploy script → Install → Build → PM2 restart
 - **Server:** `135.181.43.68` (White Rabbit)
 - **Deploy path:** `/var/www/clawqa-nextjs`
 
