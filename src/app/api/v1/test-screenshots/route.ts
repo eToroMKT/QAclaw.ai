@@ -17,10 +17,10 @@ export async function GET(req: NextRequest) {
   if (runId) where.runId = runId;
   if (status) where.status = status;
 
-  const screenshots = await prisma.testScreenshot.findMany({
+  const screenshots = await prisma.screenshot.findMany({
     where,
     include: { project: { select: { name: true, slug: true } } },
-    orderBy: { createdAt: "desc" },
+    orderBy: { runDate: "desc" },
     take: 200,
   });
 
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { projectId, projectSlug, cycleId, testName, status, category, description, filePath, width, height, runId, runDate } = body;
+  const { projectId, projectSlug, testName, status, filePath, runId, runDate } = body;
 
   let resolvedProjectId = projectId;
   if (!resolvedProjectId && projectSlug) {
@@ -46,20 +46,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "projectId/projectSlug, testName, and filePath are required" }, { status: 400 });
   }
 
-  const screenshot = await prisma.testScreenshot.create({
+  const screenshot = await prisma.screenshot.create({
     data: {
       projectId: resolvedProjectId,
-      cycleId: cycleId || null,
       testName,
       status: status || "pass",
-      category: category || "",
-      description: description || "",
-      filePath,
-      width: width || 0,
-      height: height || 0,
-      runId: runId || "",
+      imageUrl: filePath,
+      runId: runId || "manual",
       runDate: runDate ? new Date(runDate) : new Date(),
     },
+    include: { project: { select: { name: true, slug: true } } },
   });
 
   return NextResponse.json(screenshot, { status: 201 });
