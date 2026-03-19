@@ -132,6 +132,21 @@ model TestCycle {
   project                    Project         @relation(fields: [projectId], references: [id])
   bugReports                 BugReport[]
   testExecutions             TestExecution[]
+  attachments                CycleAttachment[]
+}
+
+model CycleAttachment {
+  id        String    @id @default(cuid())
+  cycleId   String
+  type      String    @default("file")
+  fileName  String
+  mimeType  String
+  filePath  String
+  fileSize  Int
+  createdAt DateTime  @default(now())
+  cycle     TestCycle @relation(fields: [cycleId], references: [id])
+
+  @@index([cycleId, createdAt])
 }
 
 model TestExecution {
